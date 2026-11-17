@@ -42,6 +42,10 @@
 
       <nav class="space-y-1">
         <button type="button" onclick="window.switchTab('ozet')" id="nav-ozet" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold bg-emerald-600 text-white">📊 Genel Özet & Analiz</button>
+        <button type="button" onclick="window.switchTab('kontrol')" id="nav-kontrol" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold text-amber-300 bg-amber-500/10 border border-amber-400/30 hover:bg-slate-800 flex items-center justify-between">
+          <span>🛡️ Kart, Abonelik & Nakit</span>
+          <span class="px-1.5 py-0.5 rounded bg-amber-400 text-slate-950 text-[9px] font-extrabold">YENİ</span>
+        </button>
         <button type="button" onclick="window.switchTab('ekle')" id="nav-ekle" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-300 hover:bg-slate-800">📸 Harcama & Fiş Ekle</button>
         <button type="button" onclick="window.switchTab('hareketler')" id="nav-hareketler" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-300 hover:bg-slate-800">🧾 Harcama Geçmişi</button>
         <button type="button" onclick="window.switchTab('kartlar')" id="nav-kartlar" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-300 hover:bg-slate-800">📄 PDF & Excel Yükle</button>
@@ -80,6 +84,7 @@
         <select id="month-filter" onchange="window.renderAll()" class="bg-white border border-slate-200 text-xs font-bold rounded-xl px-2.5 py-1.5">
           <option value="ALL">Tüm Dönemler</option>
         </select>
+        <button type="button" onclick="window.switchTab('kontrol')" class="bg-amber-500 hover:bg-amber-600 text-slate-950 text-xs font-extrabold px-3 py-1.5 rounded-xl shadow-sm">🛡️ Kart & Nakit Kontrolü</button>
         <button type="button" onclick="window.switchTab('ekle')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-1.5 rounded-xl">+ Harcama Ekle</button>
         <button type="button" onclick="window.openAccountsModal()" class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold px-3 py-1.5 rounded-xl">💳 Kart Ekle</button>
         <button type="button" onclick="window.switchTab('kartlar')" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3 py-1.5 rounded-xl">📄 Ekstre Yükle</button>
@@ -156,6 +161,191 @@
             <button type="button" onclick="window.switchTab('hareketler')" class="text-xs font-bold text-emerald-600">Tümünü Gör →</button>
           </div>
           <div id="recent-list" class="divide-y divide-slate-100"></div>
+        </div>
+      </section>
+
+      <!-- YENİ SEKME: KREDİ KARTI FRENİ, ABONELİK RADARI & NET NAKİT SİMÜLATÖRÜ -->
+      <section id="tab-kontrol" class="hidden space-y-6">
+        <!-- Üst Özet Карtları: 3 Kritik Soruya Tek Bakışta Yanıt -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-gradient-to-br from-slate-900 to-indigo-950 text-white rounded-2xl p-5 shadow-md border border-indigo-500/30">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] uppercase tracking-wider font-extrabold text-indigo-300">1. Önümüzdeki Dönem Kart Ekstresi</span>
+              <span id="cc-brake-badge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-500/20 text-emerald-300">Kontrol Altında</span>
+            </div>
+            <p id="ctrl-next-card-bill" class="font-extrabold text-2xl sm:text-3xl mt-2 text-white">0,00 ₺</p>
+            <p id="ctrl-card-limit-sub" class="text-xs text-indigo-200 mt-1">Sabit Taksitler + Bu Ayki Tek Çekimler</p>
+          </div>
+
+          <div class="bg-gradient-to-br from-rose-950 to-slate-900 text-white rounded-2xl p-5 shadow-md border border-rose-500/30">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] uppercase tracking-wider font-extrabold text-rose-300">2. Aylık Abonelik & Fatura Yükü</span>
+              <span id="sub-leak-badge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-500/30 text-rose-200">Çift Çekim Uyarısı!</span>
+            </div>
+            <p id="ctrl-sub-monthly-total" class="font-extrabold text-2xl sm:text-3xl mt-2 text-white">0,00 ₺</p>
+            <p id="ctrl-sub-potential-save" class="text-xs text-amber-300 font-semibold mt-1">İptal/Birleştirme ile Tasarruf Potansiyeli: 0 ₺/Ay</p>
+          </div>
+
+          <div class="bg-gradient-to-br from-emerald-950 to-teal-950 text-white rounded-2xl p-5 shadow-md border border-emerald-500/30">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] uppercase tracking-wider font-extrabold text-emerald-300">3. Elde Kalacak Net Serbest Nakit</span>
+              <span id="net-cash-status-badge" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-400 text-slate-950">Hesaplandı</span>
+            </div>
+            <p id="ctrl-net-free-cash" class="font-extrabold text-2xl sm:text-3xl mt-2 text-emerald-300">0,00 ₺</p>
+            <p id="ctrl-daily-safe-spend" class="text-xs text-emerald-100 mt-1">Günlük Güvenli Harcama Limiti: 0,00 ₺ / gün</p>
+          </div>
+        </div>
+
+        <!-- BÖLÜM 1: ELDE KALACAK NET MİKTAR & GEÇMİŞ AY BORÇ SİMÜLATÖRÜ -->
+        <div class="bg-white rounded-2xl p-5 border-2 border-emerald-500/30 shadow-sm space-y-5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+            <div>
+              <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-extrabold uppercase">Nakit Akışı & Borç Sarmalı Çözücü</span>
+              <h3 class="font-extrabold text-base sm:text-lg text-slate-900 mt-1">💰 Ay Sonu Elimde Ne Kalacak? (Önceki Aydan Gelen Borç Simülatörü)</h3>
+              <p class="text-xs text-slate-500">Önceki aydan devreden kredi kartı borcunuzu ve sabit ödemelerinizi maaşınızdan düşerek ay içinde sizi zora sokmayacak gerçek harcama alanınızı hesaplar.</p>
+            </div>
+            <button type="button" onclick="window.resetCashFlowDefaults()" class="text-xs font-bold text-slate-500 hover:text-slate-900 underline shrink-0">Экstre Verilerine Sıfırla</button>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            <!-- Sol: Sürgülü / Rakamlı Simülasyon Kontrolleri -->
+            <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3.5 bg-slate-50 p-4 rounded-2xl border border-slate-200/80">
+              <div>
+                <label class="block text-[11px] font-bold text-slate-700 mb-1">Aylık Net Gelir (Maaş + Ek Gelir)</label>
+                <input type="number" step="500" id="sim-income" oninput="window.updateFinancialControlCenter()" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-extrabold text-emerald-700 bg-white" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-rose-700 mb-1">⚠️ Önceki Aydan Gelen Ekstre Borcu</label>
+                <input type="number" step="500" id="sim-prev-card-debt" oninput="window.updateFinancialControlCenter()" class="w-full px-3 py-2 rounded-xl border border-rose-300 text-sm font-extrabold text-rose-700 bg-rose-50/40" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-700 mb-1">Sabit Bireysel Kredi Taksiti (Garanti)</label>
+                <input type="number" step="250" id="sim-loan-payment" oninput="window.updateFinancialControlCenter()" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm font-bold text-slate-800 bg-white" />
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-700 mb-1">Eş / Ortak Ev Bütçesi (Esra Transferi)</label>
+                <input type="number" step="500" id="sim-wife-allowance" oninput="window.updateFinancialControlCenter()" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-sm font-bold text-indigo-700 bg-white" />
+              </div>
+              <div class="sm:col-span-2 pt-2 border-t border-slate-200">
+                <div class="flex justify-between items-center text-xs font-bold mb-1">
+                  <span class="text-slate-800">🎯 Geçmiş Dönem Kart Borcunun Ne Kadarını Bu Ay Ödeyeceksiniz?</span>
+                  <span id="sim-pay-ratio-label" class="text-emerald-700 font-extrabold">%100 (Tamamı - Faizsiz)</span>
+                </div>
+                <input type="range" id="sim-card-pay-percent" min="20" max="100" step="5" value="100" oninput="window.updateFinancialControlCenter()" class="w-full accent-emerald-600 cursor-pointer" />
+                <div class="flex justify-between text-[10px] text-slate-500 mt-0.5">
+                  <span>%20 Asgari Ödeme (Yasal Uyarı Riski!)</span>
+                  <span>%50 Kısmi</span>
+                  <span>%100 Tam Ödeme (Önerilen)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sağ: Şelale (Waterfall) Nakit Akışı Özeti & Kurtuluş Stratejisi -->
+            <div class="lg:col-span-5 bg-slate-900 text-white rounded-2xl p-4 space-y-3">
+              <h4 class="text-xs font-extrabold uppercase tracking-wider text-emerald-400">📊 Maaştan Cebe Kalan Şelale Hesabı</h4>
+              <div class="space-y-2 text-xs">
+                <div class="flex justify-between py-1 border-b border-slate-800">
+                  <span class="text-slate-300">(+) Aylık Maaş & Gelir:</span>
+                  <span id="wf-income" class="font-bold text-emerald-400">+117.500,00 ₺</span>
+                </div>
+                <div class="flex justify-between py-1 border-b border-slate-800">
+                  <span class="text-slate-300">(-) Bireysel Kredi Taksiti:</span>
+                  <span id="wf-loan" class="font-bold text-rose-400">-25.751,25 ₺</span>
+                </div>
+                <div class="flex justify-between py-1 border-b border-slate-800">
+                  <span class="text-slate-300">(-) Önceki Ay Kart Borcu Ödemesi:</span>
+                  <span id="wf-card-paid" class="font-bold text-rose-400">-38.819,14 ₺</span>
+                </div>
+                <div class="flex justify-between py-1 border-b border-slate-800">
+                  <span class="text-slate-300">(-) Eş & Eğitim Sabit Bütçesi:</span>
+                  <span id="wf-family" class="font-bold text-indigo-300">-15.000,00 ₺</span>
+                </div>
+                <div class="flex justify-between py-1 border-b border-slate-800">
+                  <span class="text-slate-300">(-) Aktif Dijital Abonelik & Faturalar:</span>
+                  <span id="wf-subs" class="font-bold text-amber-300">-4.250,00 ₺</span>
+                </div>
+                <div class="flex justify-between pt-2 text-sm font-extrabold">
+                  <span class="text-white">= Elde Kalan Net Serbest Nakit:</span>
+                  <span id="wf-net-left" class="text-emerald-400 text-base">33.679,61 ₺</span>
+                </div>
+              </div>
+
+              <div id="rollover-warning-card" class="rounded-xl bg-amber-500/20 border border-amber-400/40 p-3 text-[11px] text-amber-200 leading-relaxed"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BÖLÜM 2: KREDİ KARTI HARCAMA FRENİ & ÖNÜMÜZDEKİ EKSTRE TAHMİNİ -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div class="lg:col-span-6 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <span class="px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-800 text-[10px] font-extrabold uppercase">Kredi Kartı Sınırlayıcı</span>
+                <h3 class="font-extrabold text-base text-slate-900 mt-1">🛑 Aylık Kredi Kartı Harcama Freni</h3>
+              </div>
+              <span id="cc-thermometer-pct" class="text-lg font-extrabold text-indigo-700">%0</span>
+            </div>
+
+            <div class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-2">
+              <div class="flex justify-between text-xs font-bold">
+                <span class="text-slate-700">Kredi Kartı Aylık Tavan Limitiniz (Hedef):</span>
+                <span id="cc-cap-val-label" class="text-indigo-700 font-extrabold">20.000,00 ₺</span>
+              </div>
+              <input type="range" id="cc-monthly-cap-slider" min="5000" max="60000" step="1000" value="20000" oninput="window.updateCardCapLimit(this.value)" class="w-full accent-indigo-600 cursor-pointer" />
+              <div class="flex justify-between text-[10px] text-slate-400">
+                <span>Sıkı Fren (10.000 ₺)</span>
+                <span>Dengeli (20.000 ₺)</span>
+                <span>Esnek (40.000 ₺)</span>
+              </div>
+            </div>
+
+            <!-- Termometre Barı -->
+            <div class="space-y-1.5">
+              <div class="flex justify-between text-xs font-semibold">
+                <span class="text-slate-500">Önümüzdeki Ekstreye Şimdiden Yansıyan:</span>
+                <span id="cc-projected-bill-label" class="font-extrabold text-slate-900">0,00 ₺</span>
+              </div>
+              <div class="w-full h-4 bg-slate-100 rounded-full overflow-hidden p-0.5 border border-slate-200">
+                <div id="cc-thermometer-bar" class="h-full rounded-full bg-emerald-600 transition-all" style="width: 50%"></div>
+              </div>
+              <p id="cc-remaining-allowance-msg" class="text-xs font-bold text-emerald-700"></p>
+            </div>
+
+            <!-- Gelecek Ekstreyi Oluşturan Kalemler Özeti -->
+            <div class="pt-3 border-t border-slate-100 space-y-2">
+              <h4 class="text-xs font-extrabold text-slate-700 uppercase">📅 Önümüzdeki Ekstreyi Oluşturan Sabit & Yeni Kalemler</h4>
+              <div id="cc-upcoming-breakdown" class="space-y-1.5 text-xs"></div>
+            </div>
+          </div>
+
+          <!-- BÖLÜM 3: ABONELİK KONTROL & SIZINTI KAPATMA ARACI -->
+          <div class="lg:col-span-6 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4 flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between">
+                <div>
+                  <span class="px-2 py-0.5 rounded-full bg-rose-100 text-rose-800 text-[10px] font-extrabold uppercase">Abonelik & Fatura Denetçisi</span>
+                  <h3 class="font-extrabold text-base text-slate-900 mt-1">✂️ Abonelik Sızıntılarını Durdur</h3>
+                </div>
+                <div class="text-right">
+                  <span class="text-[10px] text-slate-400 block">Yıllık Tasarruf Etkisi</span>
+                  <span id="sub-yearly-save-badge" class="text-sm font-extrabold text-emerald-600">0,00 ₺ / Yıl</span>
+                </div>
+              </div>
+
+              <p class="text-xs text-slate-500">
+                Ekstrelerinizde tespit edilen düzenli abonelikler aşağıdadır. İptal etmeyi veya dondurmayı düşündüğünüz aboneliklerin yanındaki anahtarı kapatarak **Elde Kalacak Net Nakit** artışını anında görün:
+              </p>
+
+              <div id="subs-interactive-list" class="divide-y divide-slate-100 max-h-80 overflow-y-auto pr-1 border border-slate-200 rounded-xl px-3"></div>
+            </div>
+
+            <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-900 flex items-center justify-between gap-2">
+              <div>
+                <strong>🚨 Tespit Edilen Kritik Sızıntı:</strong> Netflix (289,99 ₺) ve Google One hem Garanti (9025) hem İş Bankası Sanal Kart (4353) üzerinden çekiliyor!
+              </div>
+              <button type="button" onclick="window.cancelDuplicateSubsQuick()" class="shrink-0 px-3 py-1.5 rounded-lg bg-amber-900 text-white font-bold text-[11px]">Çiftleri Kapat</button>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -354,7 +544,7 @@
   <!-- MOBİL ALT MENÜ -->
   <nav class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-slate-200 px-2 py-1.5 flex justify-around text-[11px] font-bold">
     <button type="button" onclick="window.switchTab('ozet')" class="py-1 px-2 text-emerald-600">📊 Özet</button>
-    <button type="button" onclick="window.switchTab('hareketler')" class="py-1 px-2 text-slate-600">🧾 Geçmiş</button>
+    <button type="button" onclick="window.switchTab('kontrol')" class="py-1 px-2 text-amber-600 font-extrabold">🛡️ Kontrol</button>
     <button type="button" onclick="window.switchTab('ekle')" class="py-1 px-3 rounded-xl bg-emerald-600 text-white">+ Ekle</button>
     <button type="button" onclick="window.switchTab('kartlar')" class="py-1 px-2 text-slate-600">📄 Ekstre</button>
     <button type="button" onclick="window.openAccountsModal()" class="py-1 px-2 text-slate-600">💳 Kartlar</button>
@@ -455,13 +645,51 @@
     };
 
     let accounts = [
-      { id: "a1", name: "Garanti Ana Hesap", owner: "Serdar", type: "Banka / Debit" },
-      { id: "a2", name: "İş Bankası Maximum", owner: "Serdar", type: "Kredi Kartı" },
-      { id: "a3", name: "İş Bankası Sanal Kart", owner: "Serdar", type: "Sanal Kart" },
-      { id: "a4", name: "Garanti Abonelik Hesabı", owner: "Serdar", type: "Banka / Debit" },
-      { id: "a5", name: "Esra Banka / Debit Kartı", owner: "Esra", type: "Banka / Debit" },
-      { id: "a6", name: "Esra Kredi Kartı", owner: "Esra", type: "Kredi Kartı" },
-      { id: "a7", name: "Nakit / Ortak", owner: "Ortak", type: "Nakit" }
+      { id: "acc_1", name: "Garanti Ana Hesap", owner: "Serdar", type: "Banka / Debit" },
+      { id: "acc_2", name: "İş Bankası Maximum", owner: "Serdar", type: "Kredi Kartı" },
+      { id: "acc_3", name: "İş Bankası Sanal Kart", owner: "Serdar", type: "Sanal Kart" },
+      { id: "acc_4", name: "Garanti Abonelik Hesabı", owner: "Serdar", type: "Banka / Debit" },
+      { id: "acc_5", name: "Esra Banka / Debit Kartı", owner: "Esra", type: "Banka / Debit" },
+      { id: "acc_6", name: "Esra Kredi Kartı", owner: "Esra", type: "Kredi Kartı" },
+      { id: "acc_7", name: "Nakit / Ortak", owner: "Ortak", type: "Nakit" }
+    ];
+
+    // KREDİ KARTI FRENİ, NAKİT SİMÜLATÖRÜ VE ABONELİK KONTROL VERİLERİ
+    let controlConfig = {
+      monthlyIncome: 117500,
+      prevCardDebt: 38819.14, // Kasım 2026 Hesap Özeti Borcu
+      loanInstallment: 25751.25, // Garanti Bireysel Kredi Taksiti
+      wifeAllowance: 15000, // Esra Aylık Ortak Bütçe
+      cardPayPercent: 100, // Geçmiş borcun yüzde kaçı ödenecek
+      cardMonthlyCap: 20000 // Yeni dönem kredi kartı harcama tavanı
+    };
+
+    // Ekstrelerden tespit edilen gerçek abonelik ve düzenli fatura listesi
+    let trackedSubscriptions = [
+      { id: "sub_claude24", name: "Anthropic Claude Pro (24 USD)", card: "İş Bankası Sanal Kart", amount: 1222.00, active: true, warn: "Yüksek Kur Yükü" },
+      { id: "sub_claude6", name: "Anthropic Claude Ek Kullanım (6 USD)", card: "İş Bankası Sanal Kart", amount: 308.55, active: true, warn: "Ek API Çekimi" },
+      { id: "sub_g_simpl", name: "Google Simple / Uygulama Aboneliği", card: "Garanti Abonelik (9025)", amount: 769.99, active: true, warn: "İncelenmeli" },
+      { id: "sub_g_one_gar", name: "Google One (Garanti 9025)", card: "Garanti Abonelik (9025)", amount: 719.99, active: true, warn: "Çift Çekim Şüphesi" },
+      { id: "sub_g_one_is", name: "Google One London (Sanal Kart)", card: "İş Bankası Sanal Kart", amount: 359.99, active: true, warn: "Çift Çekim!" },
+      { id: "sub_g_wild1", name: "Google Wild Oyun/Uygulama (2 Adet)", card: "Garanti Abonelik (9025)", amount: 1059.98, active: true, warn: "Ayda 2 Kez Çekilmiş" },
+      { id: "sub_disney", name: "Disney+ (Google Play)", card: "Garanti Abonelik (9025)", amount: 449.90, active: true, warn: "" },
+      { id: "sub_netflix_is", name: "Netflix (İş Bankası Sanal Kart)", card: "İş Bankası Sanal Kart", amount: 289.99, active: true, warn: "Çift Çekim!" },
+      { id: "sub_netflix_gar", name: "Netflix (Garanti 9025)", card: "Garanti Abonelik (9025)", amount: 289.99, active: true, warn: "Çift Çekim!" },
+      { id: "sub_after", name: "Google Afterlight / Fotoğraf", card: "Garanti Abonelik (9025)", amount: 274.99, active: true, warn: "Kullanılıyor mu?" },
+      { id: "sub_yt", name: "YouTube Premium", card: "Garanti Abonelik (9025)", amount: 239.99, active: true, warn: "" },
+      { id: "sub_gtv", name: "Google TV Movie", card: "Garanti Abonelik (9025)", amount: 229.99, active: true, warn: "" },
+      { id: "sub_storytel", name: "Storytel Sesli Kitap", card: "Garanti Abonelik (9025)", amount: 169.99, active: true, warn: "" },
+      { id: "sub_spotify", name: "Spotify", card: "Garanti Abonelik (9025)", amount: 165.00, active: true, warn: "" },
+      { id: "sub_turknet", name: "Turk.Net Ev İnterneti", card: "Garanti Abonelik (9025)", amount: 949.90, active: true, warn: "Zorunlu Fatura" },
+      { id: "sub_turkcell", name: "Turkcell + TT Mobil Faturalar", card: "İş Bankası Maximum", amount: 1212.00, active: true, warn: "Zorunlu Fatura" }
+    ];
+
+    // Devam Eden Kredi Kartı Taksitleri ve Sabit Sigorta Talimatları (Gelecek Ekstreye Kesin Yansıyacaklar)
+    const UPCOMING_FIXED_CARD_INSTALLMENTS = [
+      { title: "B2B Gürpazarlama (2/3 Taksit)", amount: 2390.00, remaining: "Kalan: 2 Ay" },
+      { title: "Media Markt Eskişehir (4/6 Taksit)", amount: 1499.83, remaining: "Kalan: 3 Ay" },
+      { title: "Zurich Sigorta (4/9 Taksit)", amount: 1204.09, remaining: "Kalan: 6 Ay" },
+      { title: "QNB Sigorta Aylık Otomatik Poliçe", amount: 3907.00, remaining: "Her Ay Düzenli" }
     ];
 
     let db = null, auth = null, currentUser = null;
@@ -833,6 +1061,226 @@
 
       window.renderTxTable();
       renderSliders();
+      window.renderFinancialControlCenter();
+    };
+
+    // KREDİ KARTI FRENİ, ABONELİK RADARI & NAKİT SİMÜLATÖRÜ HESAPLAMA MOTORU
+    window.renderFinancialControlCenter = function() {
+      const incInput = document.getElementById("sim-income");
+      const debtInput = document.getElementById("sim-prev-card-debt");
+      const loanInput = document.getElementById("sim-loan-payment");
+      const wifeInput = document.getElementById("sim-wife-allowance");
+      const paySlider = document.getElementById("sim-card-pay-percent");
+      const capSlider = document.getElementById("cc-monthly-cap-slider");
+
+      if (incInput && document.activeElement !== incInput) incInput.value = controlConfig.monthlyIncome;
+      if (debtInput && document.activeElement !== debtInput) debtInput.value = controlConfig.prevCardDebt;
+      if (loanInput && document.activeElement !== loanInput) loanInput.value = controlConfig.loanInstallment;
+      if (wifeInput && document.activeElement !== wifeInput) wifeInput.value = controlConfig.wifeAllowance;
+      if (paySlider && document.activeElement !== paySlider) paySlider.value = controlConfig.cardPayPercent;
+      if (capSlider && document.activeElement !== capSlider) capSlider.value = controlConfig.cardMonthlyCap;
+
+      // 1) Abonelik Hesaplamaları
+      let activeSubTotal = 0;
+      let savedSubTotal = 0;
+      trackedSubscriptions.forEach(s => {
+        if (s.active) activeSubTotal += s.amount;
+        else savedSubTotal += s.amount;
+      });
+
+      document.getElementById("ctrl-sub-monthly-total").textContent = fmt(activeSubTotal);
+      document.getElementById("ctrl-sub-potential-save").textContent = savedSubTotal > 0
+        ? `✅ Kapatılanlardan Aylık Kazanç: +${fmt(savedSubTotal)} / Ay`
+        : `💡 Çift çekimleri ve kullanılmayanları kapatarak ayda ~3.200 ₺ kurtarın`;
+      document.getElementById("sub-yearly-save-badge").textContent = `+${fmt(savedSubTotal * 12)} / Yıl`;
+
+      const subsListEl = document.getElementById("subs-interactive-list");
+      if (subsListEl) {
+        subsListEl.innerHTML = trackedSubscriptions.map(s => `
+          <div class="py-2.5 flex items-center justify-between gap-2 text-xs ${s.active ? '' : 'opacity-45 bg-slate-50'}">
+            <div class="min-w-0 flex-1">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                <span class="font-bold text-slate-900 ${s.active ? '' : 'line-through'}">${s.name}</span>
+                ${s.warn ? `<span class="px-1.5 py-0.5 rounded text-[10px] font-bold ${s.warn.includes('Çift') ? 'bg-rose-100 text-rose-700' : 'bg-amber-100 text-amber-800'}">${s.warn}</span>` : ""}
+              </div>
+              <p class="text-[11px] text-slate-500">${s.card}</p>
+            </div>
+            <div class="flex items-center gap-2.5 shrink-0">
+              <span class="font-extrabold text-slate-900">${fmt(s.amount)}</span>
+              <button type="button" onclick="window.toggleSubscriptionItem('${s.id}')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold transition ${s.active ? 'bg-emerald-100 text-emerald-800 hover:bg-rose-100 hover:text-rose-700' : 'bg-slate-200 text-slate-600'}">
+                ${s.active ? "Aktif (Kapat)" : "İptal Edildi"}
+              </button>
+            </div>
+          </div>
+        `).join("");
+      }
+
+      // 2) Önümüzdeki Dönem Kredi Kartı Ekstre Tahmini ve Harcama Freni
+      const fixedInstallmentsSum = UPCOMING_FIXED_CARD_INSTALLMENTS.reduce((acc, x) => acc + x.amount, 0);
+      // Kasım kesiminden (05/11/2026) sonra yapılan tek çekim kredi kartı harcamalarını bul
+      let newSingleShotCardSpend = 0;
+      transactions.forEach(t => {
+        if (t.amount >= 0) return;
+        const isCard = String(t.account).includes("Maximum") || String(t.account).includes("Sanal Kart") || String(t.account).includes("Kredi Kartı");
+        if (!isCard) return;
+        const parts = String(t.date || "").split("/");
+        if (parts.length === 3) {
+          const day = parseInt(parts[0], 10);
+          const mon = parseInt(parts[1], 10);
+          const yr = parseInt(parts[2], 10);
+          // 05/11/2026 sonrası yeni dönem harcamaları
+          if (yr === 2026 && mon === 11 && day > 5 && !t.installment) {
+            newSingleShotCardSpend += Math.abs(t.amount);
+          }
+        }
+      });
+
+      // Sanal karttaki aktif abonelikler de gelecek ekstreye yansır
+      const virtualCardActiveSubs = trackedSubscriptions
+        .filter(s => s.active && s.card.includes("İş Bankası"))
+        .reduce((a, b) => a + b.amount, 0);
+
+      // Önceki aydan devreden borç varsa ve kısmi ödendiyse kalan borç + %3.25 alışveriş gecikme/akdi faizi
+      const paidCardAmount = controlConfig.prevCardDebt * (controlConfig.cardPayPercent / 100);
+      const unpaidRolloverDebt = Math.max(0, controlConfig.prevCardDebt - paidCardAmount);
+      const rolloverInterest = unpaidRolloverDebt * 0.042; // Vergiler dahil yaklaşık %4.20 maliyet
+
+      const projectedNextBill = fixedInstallmentsSum + virtualCardActiveSubs + newSingleShotCardSpend + unpaidRolloverDebt + rolloverInterest;
+      const cap = Math.max(1000, controlConfig.cardMonthlyCap);
+      const pct = Math.min(100, Math.round((projectedNextBill / cap) * 100));
+
+      document.getElementById("ctrl-next-card-bill").textContent = fmt(projectedNextBill);
+      document.getElementById("cc-projected-bill-label").textContent = `${fmt(projectedNextBill)} / Hedef: ${fmt(cap)}`;
+      document.getElementById("cc-cap-val-label").textContent = fmt(cap);
+      document.getElementById("cc-thermometer-pct").textContent = `%${pct}`;
+
+      const barEl = document.getElementById("cc-thermometer-bar");
+      const badgeEl = document.getElementById("cc-brake-badge");
+      const msgEl = document.getElementById("cc-remaining-allowance-msg");
+      const remainingCardLimit = cap - projectedNextBill;
+
+      if (barEl) {
+        barEl.style.width = `${pct}%`;
+        barEl.className = `h-full rounded-full transition-all ${pct >= 95 ? 'bg-rose-600' : pct >= 75 ? 'bg-amber-500' : 'bg-emerald-600'}`;
+      }
+      if (badgeEl) {
+        badgeEl.textContent = remainingCardLimit >= 0 ? "Limit İçinde" : "Hedef Aşıldı!";
+        badgeEl.className = `px-2 py-0.5 rounded-full text-[10px] font-extrabold ${remainingCardLimit >= 0 ? 'bg-emerald-500/20 text-emerald-300' : 'bg-rose-500/30 text-rose-200'}`;
+      }
+      if (msgEl) {
+        if (remainingCardLimit >= 0) {
+          msgEl.className = "text-xs font-bold text-emerald-700";
+          msgEl.textContent = `✅ Kredi kartı hedefinizü aşmamak için bu ay karttan en fazla ${fmt(remainingCardLimit)} daha tek çekim harcama yapabilirsiniz.`;
+        } else {
+          msgEl.className = "text-xs font-bold text-rose-600";
+          msgEl.textContent = `🚨 Dikkat! Sabit taksitler ve abonelikler nedeniyle belirlediğiniz kart tavanını ${fmt(Math.abs(remainingCardLimit))} aştınız. Yeni harcamaları nakit/debit karttan yapın!`;
+        }
+      }
+
+      const breakdownEl = document.getElementById("cc-upcoming-breakdown");
+      if (breakdownEl) {
+        breakdownEl.innerHTML = [
+          ...UPCOMING_FIXED_CARD_INSTALLMENTS.map(x => `
+            <div class="flex justify-between py-1 border-b border-slate-100">
+              <span class="text-slate-700 font-medium">📌 ${x.title} <em class="text-[10px] text-slate-400">(${x.remaining})</em></span>
+              <span class="font-bold text-slate-900">${fmt(x.amount)}</span>
+            </div>
+          `),
+          `<div class="flex justify-between py-1 border-b border-slate-100">
+            <span class="text-slate-700 font-medium">🌐 Kart Üzerindeki Aktif Abonelik & Faturalar</span>
+            <span class="font-bold text-indigo-700">${fmt(virtualCardActiveSubs)}</span>
+          </div>`,
+          unpaidRolloverDebt > 0 ? `<div class="flex justify-between py-1 border-b border-rose-100 bg-rose-50 px-1.5 rounded">
+            <span class="text-rose-700 font-bold">⚠️ Geçen Aydan Devreden Borç + Faiz</span>
+            <span class="font-extrabold text-rose-700">${fmt(unpaidRolloverDebt + rolloverInterest)}</span>
+          </div>` : ""
+        ].join("");
+      }
+
+      // 3) Şelale (Waterfall) Elde Kalacak Net Serbest Nakit Hesabı
+      const netFreeCash = controlConfig.monthlyIncome
+        - controlConfig.loanInstallment
+        - paidCardAmount
+        - controlConfig.wifeAllowance
+        - activeSubTotal;
+
+      const dailySafe = Math.max(0, netFreeCash / 30);
+
+      document.getElementById("ctrl-net-free-cash").textContent = fmt(netFreeCash);
+      document.getElementById("ctrl-daily-safe-spend").textContent = netFreeCash >= 0
+        ? `Günlük Güvenli Harcama Limitiniz: ${fmt(dailySafe)} / gün`
+        : `⚠️ Nakit Açığı: ${fmt(Math.abs(netFreeCash))} (Acil Fren Gerekli)`;
+
+      document.getElementById("wf-income").textContent = `+${fmt(controlConfig.monthlyIncome)}`;
+      document.getElementById("wf-loan").textContent = `-${fmt(controlConfig.loanInstallment)}`;
+      document.getElementById("wf-card-paid").textContent = `-${fmt(paidCardAmount)}`;
+      document.getElementById("wf-family").textContent = `-${fmt(controlConfig.wifeAllowance)}`;
+      document.getElementById("wf-subs").textContent = `-${fmt(activeSubTotal)}`;
+      const wfNetEl = document.getElementById("wf-net-left");
+      if (wfNetEl) {
+        wfNetEl.textContent = fmt(netFreeCash);
+        wfNetEl.className = `text-base font-extrabold ${netFreeCash >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+      }
+
+      const ratioLabel = document.getElementById("sim-pay-ratio-label");
+      if (ratioLabel) {
+        ratioLabel.textContent = `%${controlConfig.cardPayPercent} (${fmt(paidCardAmount)} Ödeme)`;
+      }
+
+      const warnCard = document.getElementById("rollover-warning-card");
+      if (warnCard) {
+        if (controlConfig.cardPayPercent < 100) {
+          warnCard.innerHTML = `⚠️ <strong>Borç Sarmalı Uyarısı:</strong> Geçmiş kart borcunuzun <strong>${fmt(unpaidRolloverDebt)}</strong> kısmını gelecek aya devrediyorsunuz. Bu durum size yaklaşık <strong>${fmt(rolloverInterest)} faiz yükü</strong> bindirir ve gelecek ayki ekstrenizi <strong>${fmt(projectedNextBill)}</strong> seviyesine şişirir!` +
+            (controlConfig.cardPayPercent <= 20 ? `<br><span class="text-rose-300 font-bold">🚨 Ekstrenizde "Bir takvim yılı içinde 2 defa asgari tutardan az ödeme yaptınız" uyarısı var; 3. kez olursa kartınız nakit çekime ve limit artışına kapanır!</span>` : "");
+        } else {
+          warnCard.innerHTML = `✅ <strong>Tam Ödeme Avantajı:</strong> Önceki aydan gelen <strong>${fmt(controlConfig.prevCardDebt)}</strong> borcun tamamını kapattığınızda <strong>0 ₺ faiz</strong> ödersiniz. Geriye tüm ay boyunca market, akaryakıt ve restoran için net <strong>${fmt(netFreeCash)}</strong> (günde <strong>${fmt(dailySafe)}</strong>) serbest nakdiniz kalır.`;
+        }
+      }
+    };
+
+    window.updateFinancialControlCenter = function() {
+      controlConfig.monthlyIncome = parseFloat(document.getElementById("sim-income")?.value || 0);
+      controlConfig.prevCardDebt = parseFloat(document.getElementById("sim-prev-card-debt")?.value || 0);
+      controlConfig.loanInstallment = parseFloat(document.getElementById("sim-loan-payment")?.value || 0);
+      controlConfig.wifeAllowance = parseFloat(document.getElementById("sim-wife-allowance")?.value || 0);
+      controlConfig.cardPayPercent = parseInt(document.getElementById("sim-card-pay-percent")?.value || 100, 10);
+      window.renderFinancialControlCenter();
+    };
+
+    window.updateCardCapLimit = function(val) {
+      controlConfig.cardMonthlyCap = Number(val);
+      window.renderFinancialControlCenter();
+    };
+
+    window.toggleSubscriptionItem = function(subId) {
+      const target = trackedSubscriptions.find(s => s.id === subId);
+      if (!target) return;
+      target.active = !target.active;
+      window.renderFinancialControlCenter();
+      toast(target.active ? `"${target.name}" tekrar aktif edildi.` : `✂️ "${target.name}" kapatıldı! Aylık +${fmt(target.amount)} cebinizde kaldı.`);
+    };
+
+    window.cancelDuplicateSubsQuick = function() {
+      ["sub_g_one_is", "sub_netflix_is", "sub_claude6", "sub_after"].forEach(id => {
+        const item = trackedSubscriptions.find(s => s.id === id);
+        if (item) item.active = false;
+      });
+      window.renderFinancialControlCenter();
+      toast("✅ Çift çekilen Netflix, Google One ve ek abonelikler simülasyonda kapatıldı!");
+    };
+
+    window.resetCashFlowDefaults = function() {
+      controlConfig = {
+        monthlyIncome: 117500,
+        prevCardDebt: 38819.14,
+        loanInstallment: 25751.25,
+        wifeAllowance: 15000,
+        cardPayPercent: 100,
+        cardMonthlyCap: 20000
+      };
+      trackedSubscriptions.forEach(s => { s.active = true; });
+      window.renderFinancialControlCenter();
+      toast("Simülatör gerçek Kasım 2026 ekstre değerlerinize sıfırlandı.");
     };
 
     window.renderTxTable = function() {
@@ -1138,15 +1586,16 @@
     };
 
     window.switchTab = function(t) {
-      ["ozet", "ekle", "hareketler", "kartlar", "hedefler"].forEach(x => {
+      ["ozet", "kontrol", "ekle", "hareketler", "kartlar", "hedefler"].forEach(x => {
         document.getElementById("tab-" + x)?.classList.toggle("hidden", x !== t);
         const navBtn = document.getElementById("nav-" + x);
         if (navBtn) {
           navBtn.className = x === t
-            ? "w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold bg-emerald-600 text-white"
-            : "w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-300 hover:bg-slate-800";
+            ? "w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold bg-emerald-600 text-white flex items-center justify-between"
+            : "w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-300 hover:bg-slate-800 flex items-center justify-between";
         }
       });
+      if (t === "kontrol") window.renderFinancialControlCenter();
     };
 
     window.openCloudModal = () => document.getElementById("cloud-modal").classList.remove("hidden");
