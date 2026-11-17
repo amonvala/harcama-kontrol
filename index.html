@@ -21,6 +21,30 @@
 </head>
 <body class="min-h-screen flex flex-col lg:flex-row pb-20 lg:pb-0">
 
+  <!-- PIN KİLİT EKRANI (VERİ GÜVENLİĞİ) -->
+  <div id="pin-lock-overlay" class="fixed inset-0 z-[100] bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl max-w-sm w-full p-6 text-white shadow-2xl space-y-5 text-center">
+      <div class="w-14 h-14 rounded-2xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center mx-auto text-2xl">🔐</div>
+      <div>
+        <h2 class="font-extrabold text-xl">Ortak Kasa PIN Girişi</h2>
+        <p class="text-xs text-slate-400 mt-1">Verilerinizi görüntülemek için kullanıcı seçip 6 haneli PIN kodunuzu girin</p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2 bg-slate-800 p-1.5 rounded-2xl">
+        <button type="button" id="pin-u-serdar" onclick="window.selectPinUser('Serdar')" class="py-2 rounded-xl text-xs font-extrabold bg-emerald-600 text-white">👨🏻‍💼 Serdar</button>
+        <button type="button" id="pin-u-esra" onclick="window.selectPinUser('Esra')" class="py-2 rounded-xl text-xs font-extrabold text-slate-300">👩🏻‍💼 Esra</button>
+      </div>
+
+      <form onsubmit="window.verifyPinSubmit(event)" class="space-y-3">
+        <input type="password" id="pin-input" maxlength="6" inputmode="numeric" placeholder="••••••" required class="w-full text-center tracking-[0.6em] font-extrabold text-xl py-3 rounded-2xl bg-slate-800 border border-slate-700 text-white focus:outline-none focus:border-emerald-500" />
+        <p id="pin-error-msg" class="hidden text-xs font-bold text-rose-400 bg-rose-950/60 border border-rose-500/30 rounded-xl p-2.5"></p>
+        <button type="submit" id="pin-submit-btn" class="w-full py-3 rounded-2xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs shadow-lg transition">
+          Kilidi Aç ve Kasaya Gir →
+        </button>
+      </form>
+    </div>
+  </div>
+
   <!-- SOL MENÜ -->
   <aside class="hidden lg:flex lg:flex-col lg:w-64 bg-slate-900 text-white shrink-0 min-h-screen p-5 justify-between sticky top-0 h-screen">
     <div>
@@ -143,15 +167,32 @@
             <div class="h-52 relative flex items-center justify-center">
               <canvas id="catChart"></canvas>
             </div>
-            <div id="cat-legend" class="mt-3 grid grid-cols-2 gap-1.5 text-[11px]"></div>
+            <div id="cat-legend" class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-[11px]"></div>
           </div>
 
-          <div class="lg:col-span-7 bg-white rounded-2xl p-4 border border-slate-200 shadow-sm">
-            <div class="flex justify-between items-center mb-3">
-              <h3 class="font-bold text-sm text-slate-900">Bütçe Kontrolü</h3>
-              <button type="button" onclick="window.switchTab('hedefler')" class="text-xs font-bold text-emerald-600">Limitleri Düzenle →</button>
+          <div class="lg:col-span-7 bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-center mb-3">
+                <h3 class="font-bold text-sm text-slate-900">Bütçe Kontrolü</h3>
+                <button type="button" onclick="window.switchTab('hedefler')" class="text-xs font-bold text-emerald-600">Limitleri Düzenle →</button>
+              </div>
+              <!-- Bütçe Toplam Özeti & Hedef Kazanç Kartı -->
+              <div id="budget-summary-banner" class="grid grid-cols-3 gap-2 mb-3.5 p-3 rounded-xl bg-slate-900 text-white text-xs">
+                <div>
+                  <span class="text-[10px] text-slate-400 block">Şu Anki Harcama</span>
+                  <strong id="bud-cur-total" class="text-sm font-extrabold text-rose-400">0,00 ₺</strong>
+                </div>
+                <div>
+                  <span class="text-[10px] text-slate-400 block">Toplam Bütçe Limiti</span>
+                  <strong id="bud-lim-total" class="text-sm font-extrabold text-white">0,00 ₺</strong>
+                </div>
+                <div>
+                  <span class="text-[10px] text-emerald-300 block">Limiti Tutturma Kazancı</span>
+                  <strong id="bud-gain-total" class="text-sm font-extrabold text-emerald-400">+0,00 ₺</strong>
+                </div>
+              </div>
+              <div id="budget-bars" class="space-y-3"></div>
             </div>
-            <div id="budget-bars" class="space-y-3"></div>
           </div>
         </div>
 
@@ -347,6 +388,36 @@
             </div>
           </div>
         </div>
+
+        <!-- BÖLÜM 4: TASARRUFU MOTİVE EDİCİ HAYAL & HEDEF KUMBARASI ARACI -->
+        <div class="bg-gradient-to-r from-emerald-950 via-teal-900 to-slate-900 text-white rounded-2xl p-5 border border-emerald-500/30 shadow-md space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-3">
+            <div>
+              <span class="px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-950 text-[10px] font-extrabold uppercase">🏆 Aile Tasarruf Motivasyon Koçu</span>
+              <h3 class="font-extrabold text-base sm:text-lg mt-1">🌟 Tasarruf Dönüştürücü: Kısıtladığınız Harcamalar Neye Dönüşüyor?</h3>
+              <p class="text-xs text-emerald-200">Kredi kartı limitinize sadık kaldığınızda, abonelik sızıntılarını kapattığınızda ve bütçe limitlerini tutturduğunuzda oluşan toplam kazancınızın aile hedeflerinize etkisi:</p>
+            </div>
+            <div class="bg-white/10 rounded-xl px-4 py-2 text-right shrink-0 border border-white/15">
+              <span class="text-[10px] text-emerald-300 uppercase font-bold block">Aylık Toplam Tasarruf Gücü</span>
+              <strong id="motiv-monthly-power" class="text-xl font-extrabold text-amber-300">0,00 ₺ / Ay</strong>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4" id="motiv-goals-cards"></div>
+
+          <div class="bg-slate-950/50 rounded-xl p-3.5 border border-emerald-400/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+            <div class="flex items-center gap-2.5">
+              <span class="text-2xl" id="motiv-badge-icon">🥇</span>
+              <div>
+                <p class="font-extrabold text-emerald-300" id="motiv-level-title">Tasarruf Seviyesi Hesaplanıyor...</p>
+                <p class="text-slate-300 text-[11px]" id="motiv-challenge-text">Küçük adımlar büyük aile hedeflerine dönüşür.</p>
+              </div>
+            </div>
+            <button type="button" onclick="window.triggerMotivBoost()" class="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs shrink-0 shadow">
+              🎯 +%10 Ek Tasarruf Meydan Okuması
+            </button>
+          </div>
+        </div>
       </section>
 
       <!-- SEKME 2: HARCAMA & FİŞ EKLE -->
@@ -443,8 +514,11 @@
       <!-- SEKME 3: HARCAMA GEÇMİŞİ -->
       <section id="tab-hareketler" class="hidden space-y-4">
         <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm space-y-3">
-          <div class="flex justify-between items-center">
-            <h3 class="font-bold text-sm text-slate-900">Tüm Harcama Geçmişi</h3>
+          <div class="flex justify-between items-center flex-wrap gap-2">
+            <div>
+              <h3 class="font-bold text-sm text-slate-900">Tüm Harcama Geçmişi</h3>
+              <p class="text-[11px] text-slate-500">Tarih veya Tutar başlıklarına tıklayarak sıralamayı değiştirebilirsiniz</p>
+            </div>
             <span id="flt-count" class="text-xs font-bold px-2.5 py-1 rounded-lg bg-slate-100">0 Kayıt</span>
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-4 gap-2.5">
@@ -457,7 +531,25 @@
               <option value="Esra">👩🏻‍💼 Esra</option>
             </select>
           </div>
-          <div id="tx-table-list" class="divide-y divide-slate-100 max-h-[520px] overflow-y-auto"></div>
+          <div class="overflow-x-auto border border-slate-200 rounded-xl max-h-[540px]">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead class="bg-slate-100 text-slate-700 font-bold sticky top-0 z-10 border-b border-slate-200">
+                <tr>
+                  <th class="p-2.5 cursor-pointer hover:bg-slate-200 select-none whitespace-nowrap" onclick="window.toggleTxSort('date')">
+                    📅 Tarih <span id="sort-ind-date" class="text-emerald-700 font-extrabold">↓</span>
+                  </th>
+                  <th class="p-2.5">Açıklama / Mağaza</th>
+                  <th class="p-2.5">Kategori</th>
+                  <th class="p-2.5">Kart / Hesap</th>
+                  <th class="p-2.5">Kişi</th>
+                  <th class="p-2.5 text-right cursor-pointer hover:bg-slate-200 select-none whitespace-nowrap" onclick="window.toggleTxSort('amount')">
+                    💰 Tutar <span id="sort-ind-amount" class="text-slate-400 font-extrabold">↕</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody id="tx-table-list" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
         </div>
       </section>
 
@@ -533,8 +625,17 @@
 
       <!-- SEKME 5: BÜTÇE LİMİTLERİ -->
       <section id="tab-hedefler" class="hidden">
-        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-          <h3 class="font-bold text-base text-slate-900 mb-4">Aylık Kategori Bütçe Limitleri</h3>
+        <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+            <div>
+              <h3 class="font-bold text-base text-slate-900">Aylık Kategori Bütçe Limitleri</h3>
+              <p class="text-xs text-slate-500">Limitleri tutturduğunuzda elde edeceğiniz aylık net kazanç aşağıda canlı hesaplanır</p>
+            </div>
+            <div class="flex flex-wrap gap-2 text-xs">
+              <div class="px-3 py-1.5 rounded-xl bg-slate-100 font-bold text-slate-800">Toplam Limit: <strong id="goal-tab-total-limit" class="text-indigo-700">0,00 ₺</strong></div>
+              <div class="px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-200 font-bold text-emerald-900">Limiti Tutturma Kazancı (Maaşa Göre): <strong id="goal-tab-net-gain" class="text-emerald-700">+0,00 ₺</strong></div>
+            </div>
+          </div>
           <div id="budget-sliders" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
         </div>
       </section>
@@ -630,9 +731,81 @@
     let chartInst = null;
     let transactions = [];
     let inspectorRows = [];
+    let txSortField = "date";
+    let txSortAsc = false;
+    let initialMonthSelected = false;
+
+    // PIN GÜVENLİK SİSTEMİ (Serdar: 202620, Esra: 186818, 3 Hatalı Girişte 5 Dk Kilit)
+    const USER_PINS = { Serdar: "202620", Esra: "186818" };
+    let pinSelectedUser = "Serdar";
+    let pinFailedAttempts = 0;
+    let pinLockUntil = 0;
+    let pinTimerInterval = null;
+
+    window.selectPinUser = function(u) {
+      pinSelectedUser = u;
+      document.getElementById("pin-u-serdar").className = u === "Serdar" ? "py-2 rounded-xl text-xs font-extrabold bg-emerald-600 text-white" : "py-2 rounded-xl text-xs font-extrabold text-slate-300";
+      document.getElementById("pin-u-esra").className = u === "Esra" ? "py-2 rounded-xl text-xs font-extrabold bg-emerald-600 text-white" : "py-2 rounded-xl text-xs font-extrabold text-slate-300";
+      document.getElementById("pin-input").focus();
+    };
+
+    function updatePinLockoutUI() {
+      const now = Date.now();
+      const errEl = document.getElementById("pin-error-msg");
+      const btnEl = document.getElementById("pin-submit-btn");
+      const inpEl = document.getElementById("pin-input");
+      if (now < pinLockUntil) {
+        const remSec = Math.ceil((pinLockUntil - now) / 1000);
+        const mins = Math.floor(remSec / 60);
+        const secs = remSec % 60;
+        errEl.classList.remove("hidden");
+        errEl.textContent = `🚫 3 kez yanlış PIN girdiniz! Lütfen 5 dakika sonra tekrar deneyin. (Kalan süre: ${mins} dk ${secs} sn)`;
+        btnEl.disabled = true;
+        inpEl.disabled = true;
+        btnEl.classList.add("opacity-50", "cursor-not-allowed");
+      } else {
+        if (pinLockUntil !== 0) {
+          pinLockUntil = 0;
+          pinFailedAttempts = 0;
+          errEl.classList.add("hidden");
+          btnEl.disabled = false;
+          inpEl.disabled = false;
+          btnEl.classList.remove("opacity-50", "cursor-not-allowed");
+        }
+      }
+    }
+
+    window.verifyPinSubmit = function(e) {
+      e.preventDefault();
+      if (Date.now() < pinLockUntil) {
+        updatePinLockoutUI();
+        return;
+      }
+      const entered = (document.getElementById("pin-input").value || "").trim();
+      const errEl = document.getElementById("pin-error-msg");
+      if (entered === USER_PINS[pinSelectedUser]) {
+        pinFailedAttempts = 0;
+        errEl.classList.add("hidden");
+        document.getElementById("pin-lock-overlay").classList.add("hidden");
+        window.setActiveUser(pinSelectedUser);
+        toast(`🔓 Hoş geldiniz ${pinSelectedUser}!`);
+      } else {
+        pinFailedAttempts++;
+        document.getElementById("pin-input").value = "";
+        if (pinFailedAttempts >= 3) {
+          pinLockUntil = Date.now() + 5 * 60 * 1000;
+          updatePinLockoutUI();
+          if (pinTimerInterval) clearInterval(pinTimerInterval);
+          pinTimerInterval = setInterval(updatePinLockoutUI, 1000);
+        } else {
+          errEl.classList.remove("hidden");
+          errEl.textContent = `❌ Hatalı PIN kodu! (${pinFailedAttempts}/3 deneme). ${3 - pinFailedAttempts} hakkınız kaldı.`;
+        }
+      }
+    };
 
     const CATEGORIES = [
-      "Market & Mutfak", "Yeme & İçme / Eğlence", "Eğitim & Çocuk", "Eş Bütçesi (Esra)",
+      "Market & Mutfak", "Tekel & Kuruyemiş", "Yeme & İçme / Eğlence", "Eğitim & Çocuk", "Eş Bütçesi (Esra)",
       "Araç & Ulaşım", "Abonelik & İletişim", "Ev, Teknoloji & Alışveriş", "Giyim & Aksesuar",
       "Evcil Hayvan (Pet)", "Sağlık", "Sigorta", "Kitap & Kültür",
       "Kredi Taksiti & Masrafı", "Kredi Kartı Ödemesi", "İç Transfer (Çıkış)", "İç Transfer (Giriş)",
@@ -640,7 +813,7 @@
     ];
 
     let budgets = {
-      "Market & Mutfak": 16000, "Yeme & İçme / Eğlence": 10000, "Araç & Ulaşım": 9000,
+      "Market & Mutfak": 12000, "Tekel & Kuruyemiş": 4500, "Yeme & İçme / Eğlence": 10000, "Araç & Ulaşım": 9000,
       "Abonelik & İletişim": 3500, "Eğitim & Çocuk": 15000, "Ev, Teknoloji & Alışveriş": 7500
     };
 
@@ -700,7 +873,10 @@
       { id: "s1", date: "15/11/2026", desc: "SAĞLIK MANAVI", amount: -800.00, account: "Garanti Ana Hesap", category: "Market & Mutfak", who: "Serdar", installment: "" },
       { id: "s2", date: "15/11/2026", desc: "549.99TL - Google Wild", amount: -549.99, account: "Garanti Abonelik Hesabı", category: "Abonelik & İletişim", who: "Serdar", installment: "" },
       { id: "s3", date: "14/11/2026", desc: "DÜNYA KÖFTE", amount: -1890.13, account: "Garanti Ana Hesap", category: "Yeme & İçme / Eğlence", who: "Serdar", installment: "" },
-      { id: "s4", date: "14/11/2026", desc: "DEMİR TEKEL", amount: -1000.00, account: "Garanti Ana Hesap", category: "Market & Mutfak", who: "Serdar", installment: "" },
+      { id: "s4", date: "14/11/2026", desc: "DEMİR TEKEL", amount: -1000.00, account: "Garanti Ana Hesap", category: "Tekel & Kuruyemiş", who: "Serdar", installment: "" },
+      { id: "s4b", date: "07/11/2026", desc: "DEMİR TEKEL ESKİŞEHİR", amount: -1745.00, account: "Garanti Ana Hesap", category: "Tekel & Kuruyemiş", who: "Serdar", installment: "" },
+      { id: "s4c", date: "05/11/2026", desc: "OĞUZ TEKEL CE CE", amount: -425.00, account: "Garanti Ana Hesap", category: "Tekel & Kuruyemiş", who: "Serdar", installment: "" },
+      { id: "s4d", date: "11/11/2026", desc: "ÖMÜR KURUYEMİŞ", amount: -920.00, account: "Garanti Ana Hesap", category: "Tekel & Kuruyemiş", who: "Serdar", installment: "" },
       { id: "s5", date: "14/11/2026", desc: "VENEDİK PASTANELERİ", amount: -3700.00, account: "Garanti Ana Hesap", category: "Yeme & İçme / Eğlence", who: "Serdar", installment: "" },
       { id: "s6", date: "13/11/2026", desc: "PARTİ ŞEHRİ", amount: -795.00, account: "Garanti Ana Hesap", category: "Eğitim & Çocuk", who: "Serdar", installment: "" },
       { id: "s7", date: "11/11/2026", desc: "ŞOK MARKET ESKİŞEHİR ÖMÜR", amount: -1028.28, account: "Garanti Ana Hesap", category: "Market & Mutfak", who: "Serdar", installment: "" },
@@ -781,8 +957,9 @@
       if (amt > 0) return d.includes("MAAŞ") ? "Gelir - Maaş" : (d.includes("AKTARIM") ? "İç Transfer (Giriş)" : "Diğer Gelir / İade");
       if (d.includes("KREDİ KARTI") || d.includes("AKTARIM")) return "Kredi Kartı Ödemesi";
       if (d.includes("ESRA")) return d.includes("NEHİR") ? "Eğitim & Çocuk" : "Eş Bütçesi (Esra)";
+      if (d.includes("TEKEL") || d.includes("KURUYEMİŞ") || d.includes("KURUYEMIS")) return "Tekel & Kuruyemiş";
       if (d.includes("KÖFTE") || d.includes("SUSHICO") || d.includes("PASTANES") || d.includes("PUB") || d.includes("ALAÇATI") || d.includes("CADI")) return "Yeme & İçme / Eğlence";
-      if (d.includes("MIGROS") || d.includes("CARREFOUR") || d.includes("ŞOK") || d.includes("A101") || d.includes("MARKET") || d.includes("MANAV") || d.includes("TEKEL") || d.includes("KESKIN")) return "Market & Mutfak";
+      if (d.includes("MIGROS") || d.includes("CARREFOUR") || d.includes("ŞOK") || d.includes("A101") || d.includes("MARKET") || d.includes("MANAV") || d.includes("KESKIN")) return "Market & Mutfak";
       if (d.includes("OPET") || d.includes("PETROL") || d.includes("KARACAN") || d.includes("TUVTURK")) return "Araç & Ulaşım";
       if (d.includes("GOOGLE") || d.includes("NETFLIX") || d.includes("STORYTEL") || d.includes("TURK.NET") || d.includes("TURKCELL") || d.includes("MOBIL") || d.includes("ANTHROPIC")) return "Abonelik & İletişim";
       if (d.includes("SIGORTA") || d.includes("SİGORTA")) return "Sigorta";
@@ -972,13 +1149,30 @@
         const p = String(t.date || "").split("/");
         if (p.length === 3) mSet.add(`${p[1]}/${p[2]}`);
       });
-      const arr = Array.from(mSet).sort().reverse();
+      const arr = Array.from(mSet).sort((a, b) => {
+        const [m1, y1] = a.split("/").map(Number);
+        const [m2, y2] = b.split("/").map(Number);
+        return y2 !== y1 ? y2 - y1 : m2 - m1;
+      });
       sel.innerHTML = `<option value="ALL">Tüm Dönemler (${transactions.length})</option>` +
-        arr.map(m => `<option value="${m}">${m}</option>`).join("");
-      if (arr.includes(prev)) sel.value = prev;
+        arr.map(m => `<option value="${m}">${m === arr[0] ? "📅 Güncel Dönem (" + m + ")" : m}</option>`).join("");
+      if (!initialMonthSelected && arr.length > 0) {
+        sel.value = arr[0]; // Sayfa açıldığında standart olarak en güncel dönem seçilir
+        initialMonthSelected = true;
+      } else if (arr.includes(prev) || prev === "ALL") {
+        sel.value = prev;
+      }
     }
 
     window.renderAll = function() {
+      // Eski kayıtlarda TEKEL veya KURUYEMİŞ olup Market kategorisinde kalanları otomatik Tekel & Kuruyemiş'e normalize et
+      transactions.forEach(t => {
+        const up = String(t.desc || "").toUpperCase();
+        if (t.category === "Market & Mutfak" && (up.includes("TEKEL") || up.includes("KURUYEMİŞ") || up.includes("KURUYEMIS"))) {
+          t.category = "Tekel & Kuruyemiş";
+        }
+      });
+
       document.getElementById("empty-alert").classList.toggle("hidden", transactions.length > 0);
       document.getElementById("tx-count-side").textContent = `${transactions.length} Adet`;
 
@@ -1005,14 +1199,20 @@
       document.getElementById("kpi-fam").textContent = fmt(fam);
       document.getElementById("kpi-crd").textContent = fmt(crd);
 
-      const entries = Object.entries(catMap).sort((a, b) => b[1] - a[1]).slice(0, 6);
-      const colors = ["#059669", "#4f46e5", "#e11d48", "#d97706", "#0284c7", "#7c3aed"];
-      document.getElementById("cat-legend").innerHTML = entries.map((e, i) => `
-        <div class="flex justify-between p-1 bg-slate-50 rounded">
-          <span class="truncate font-semibold">${e[0]}</span>
-          <span class="font-bold">${fmt(e[1])}</span>
-        </div>
-      `).join("");
+      const entries = Object.entries(catMap).sort((a, b) => b[1] - a[1]).slice(0, 7);
+      const colors = ["#059669", "#4f46e5", "#e11d48", "#d97706", "#0284c7", "#7c3aed", "#0d9488"];
+      document.getElementById("cat-legend").innerHTML = entries.map((e, i) => {
+        const clr = colors[i % colors.length];
+        return `
+          <div class="flex items-center justify-between p-1.5 bg-slate-50 rounded-lg border border-slate-100">
+            <span class="flex items-center gap-1.5 truncate font-bold" style="color:${clr}">
+              <span class="w-3 h-3 rounded-full shrink-0 shadow-sm" style="background-color:${clr}"></span>
+              <span class="truncate">${e[0]}</span>
+            </span>
+            <span class="font-extrabold ml-1" style="color:${clr}">${fmt(e[1])}</span>
+          </div>
+        `;
+      }).join("");
 
       const ctx = document.getElementById("catChart");
       if (ctx && window.Chart) {
@@ -1028,14 +1228,21 @@
       }
 
       const mult = m === "ALL" ? 3 : 1;
+      let totalBudgetLim = 0;
+      let totalBudgetSpent = 0;
+
       document.getElementById("budget-bars").innerHTML = Object.entries(budgets).map(([c, lim]) => {
         const s = catMap[c] || 0;
         const l = lim * mult;
+        totalBudgetLim += l;
+        totalBudgetSpent += s;
         const p = Math.min(100, Math.round((s / Math.max(1, l)) * 100));
+        const diff = l - s;
         return `
           <div>
             <div class="flex justify-between text-xs font-bold mb-1">
-              <span>${c}</span><span>${fmt(s)} / ${fmt(l)} (%${p})</span>
+              <span>${c}</span>
+              <span>${fmt(s)} / ${fmt(l)} (%${p}) • <em class="not-italic ${diff >= 0 ? 'text-emerald-600' : 'text-rose-600'}">${diff >= 0 ? '+' + fmt(diff) + ' Kaldı' : fmt(Math.abs(diff)) + ' Aşıldı'}</em></span>
             </div>
             <div class="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
               <div class="${p > 90 ? 'bg-rose-600' : 'bg-emerald-600'} h-full" style="width:${p}%"></div>
@@ -1044,9 +1251,20 @@
         `;
       }).join("");
 
+      const budgetSavedGain = totalBudgetLim - totalBudgetSpent;
+      const curTotEl = document.getElementById("bud-cur-total");
+      const limTotEl = document.getElementById("bud-lim-total");
+      const gainTotEl = document.getElementById("bud-gain-total");
+      if (curTotEl) curTotEl.textContent = fmt(totalBudgetSpent);
+      if (limTotEl) limTotEl.textContent = fmt(totalBudgetLim);
+      if (gainTotEl) {
+        gainTotEl.textContent = budgetSavedGain >= 0 ? `+${fmt(budgetSavedGain)} Kazanç` : `-${fmt(Math.abs(budgetSavedGain))} Aşım`;
+        gainTotEl.className = `text-sm font-extrabold ${budgetSavedGain >= 0 ? 'text-emerald-400' : 'text-rose-400'}`;
+      }
+
       const recentEl = document.getElementById("recent-list");
       if (list.length === 0) {
-        recentEl.innerHTML = `<p class="py-4 text-center text-xs text-slate-400">Henüz işlem eklenmedi. "+ Harcama Ekle" veya "📄 Ekstre Yükle" butonunu kullanabilirsiniz.</p>`;
+        recentEl.innerHTML = `<p class="py-4 text-center text-xs text-slate-400">Bu dönemde işlem bulunamadı.</p>`;
       } else {
         recentEl.innerHTML = list.slice(0, 8).map(t => `
           <div class="py-2.5 flex justify-between items-center text-xs">
@@ -1236,6 +1454,61 @@
           warnCard.innerHTML = `✅ <strong>Tam Ödeme Avantajı:</strong> Önceki aydan gelen <strong>${fmt(controlConfig.prevCardDebt)}</strong> borcun tamamını kapattığınızda <strong>0 ₺ faiz</strong> ödersiniz. Geriye tüm ay boyunca market, akaryakıt ve restoran için net <strong>${fmt(netFreeCash)}</strong> (günde <strong>${fmt(dailySafe)}</strong>) serbest nakdiniz kalır.`;
         }
       }
+
+      // 4) Tasarruf Motivasyon Koçu & Hedef Kumbarası Hesaplaması
+      const cardBrakeGain = Math.max(0, 38819.14 - projectedNextBill); // Kasım ekstresine göre düşüş kazancı
+      const totalMonthlySavingPower = Math.max(0, savedSubTotal + cardBrakeGain + Math.max(0, netFreeCash * 0.25));
+      const powerEl = document.getElementById("motiv-monthly-power");
+      if (powerEl) powerEl.textContent = `${fmt(totalMonthlySavingPower)} / Ay`;
+
+      const DREAM_GOALS = [
+        { icon: "🏖️", title: "Yaz Aile Tatili Fonu", target: 65000, desc: "Serdar, Esra & Nehir Tatil Kumbarası" },
+        { icon: "🎓", title: "Nehir Eğitim & Gelecek Fonu", target: 100000, desc: "Okul & Gelişim Güvencesi" },
+        { icon: "🛡️", title: "Acil Durum & Altın Yastığı", target: 50000, desc: "Kredisiz Nakit Güvence" }
+      ];
+
+      const goalsEl = document.getElementById("motiv-goals-cards");
+      if (goalsEl) {
+        goalsEl.innerHTML = DREAM_GOALS.map(g => {
+          const monthsNeeded = totalMonthlySavingPower > 0 ? Math.max(1, Math.ceil(g.target / totalMonthlySavingPower)) : 99;
+          const pctGoal = Math.min(100, Math.round(((totalMonthlySavingPower * 3) / g.target) * 100));
+          return `
+            <div class="bg-white/10 rounded-xl p-3.5 border border-white/10 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="font-extrabold text-xs text-white">${g.icon} ${g.title}</span>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-400/20 text-emerald-300">Hedef: ${fmt(g.target)}</span>
+              </div>
+              <p class="text-[11px] text-slate-300">${g.desc}</p>
+              <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                <div class="bg-amber-400 h-full rounded-full" style="width:${pctGoal}%"></div>
+              </div>
+              <div class="flex justify-between text-[10px] font-bold text-emerald-300">
+                <span>3 Aylık Birikim: %${pctGoal}</span>
+                <span>⏱️ ~${monthsNeeded} Ayda Ulaşılır!</span>
+              </div>
+            </div>
+          `;
+        }).join("");
+      }
+
+      const lvlTitle = document.getElementById("motiv-level-title");
+      const lvlDesc = document.getElementById("motiv-challenge-text");
+      if (lvlTitle && lvlDesc) {
+        if (savedSubTotal > 0 && remainingCardLimit >= 0) {
+          lvlTitle.textContent = "🏆 Süper Tasarrufçu Çift Seviyesi! (Yıllık +" + fmt(totalMonthlySavingPower * 12) + " Birikim)";
+          lvlDesc.textContent = "Hem kredi kartı frenini tutturdunuz hem de çift çekilen abonelikleri kapattınız!";
+        } else {
+          lvlTitle.textContent = "🌱 Başlangıç Seviyesi — Potansiyel Yıllık Kazanç: +" + fmt(totalMonthlySavingPower * 12);
+          lvlDesc.textContent = "İpucu: Yukarıdan 'Çiftleri Kapat' butonuna basıp kart tavanını 20.000 ₺'de tutarak tatil fonunu 2 kat hızlandırın!";
+        }
+      }
+    };
+
+    window.triggerMotivBoost = function() {
+      window.cancelDuplicateSubsQuick();
+      controlConfig.cardMonthlyCap = 18000;
+      window.renderFinancialControlCenter();
+      toast("🎯 +%10 Tasarruf Meydan Okuması aktif! Çift abonelikler kapatıldı ve kart tavanı 18.000 ₺ olarak optimize edildi.");
     };
 
     window.updateFinancialControlCenter = function() {
@@ -1283,13 +1556,41 @@
       toast("Simülatör gerçek Kasım 2026 ekstre değerlerinize sıfırlandı.");
     };
 
+    function parseTrDateToNum(dStr) {
+      const p = String(dStr || "").trim().split("/");
+      if (p.length !== 3) return 0;
+      return parseInt(p[2], 10) * 10000 + parseInt(p[1], 10) * 100 + parseInt(p[0], 10);
+    }
+
+    window.toggleTxSort = function(field) {
+      if (txSortField === field) {
+        txSortAsc = !txSortAsc;
+      } else {
+        txSortField = field;
+        txSortAsc = false;
+      }
+      const dInd = document.getElementById("sort-ind-date");
+      const aInd = document.getElementById("sort-ind-amount");
+      if (dInd) {
+        dInd.textContent = txSortField === "date" ? (txSortAsc ? "↑" : "↓") : "↕";
+        dInd.className = txSortField === "date" ? "text-emerald-700 font-extrabold" : "text-slate-400 font-extrabold";
+      }
+      if (aInd) {
+        aInd.textContent = txSortField === "amount" ? (txSortAsc ? "↑" : "↓") : "↕";
+        aInd.className = txSortField === "amount" ? "text-emerald-700 font-extrabold" : "text-slate-400 font-extrabold";
+      }
+      window.renderTxTable();
+    };
+
     window.renderTxTable = function() {
+      const m = document.getElementById("month-filter")?.value || "ALL";
       const q = (document.getElementById("f-search")?.value || "").toLowerCase();
       const c = document.getElementById("f-cat")?.value || "ALL";
       const a = document.getElementById("f-acc")?.value || "ALL";
       const w = document.getElementById("f-who")?.value || "ALL";
 
       const flt = transactions.filter(t => {
+        if (m !== "ALL" && !String(t.date || "").endsWith(m)) return false;
         if (q && !String(t.desc).toLowerCase().includes(q)) return false;
         if (c !== "ALL" && t.category !== c) return false;
         if (a !== "ALL" && t.account !== a) return false;
@@ -1297,25 +1598,49 @@
         return true;
       });
 
+      flt.sort((x, y) => {
+        if (txSortField === "date") {
+          const dx = parseTrDateToNum(x.date);
+          const dy = parseTrDateToNum(y.date);
+          return txSortAsc ? dx - dy : dy - dx;
+        } else {
+          const ax = Math.abs(Number(x.amount || 0));
+          const ay = Math.abs(Number(y.amount || 0));
+          return txSortAsc ? ax - ay : ay - ax;
+        }
+      });
+
       document.getElementById("flt-count").textContent = `${flt.length} Kayıt`;
       document.getElementById("tx-table-list").innerHTML = flt.map((t) => `
-        <div class="py-2.5 flex justify-between items-center text-xs gap-2">
-          <div class="min-w-0 flex-1">
-            <p class="font-bold text-slate-900 truncate">${t.desc}</p>
-            <p class="text-[11px] text-slate-500">${t.date} • ${t.account} • ${t.category} • ${t.who || 'Serdar'}</p>
-          </div>
-          <span class="font-extrabold ${t.amount > 0 ? 'text-emerald-600' : 'text-rose-600'}">${fmt(t.amount)}</span>
-        </div>
+        <tr class="hover:bg-slate-50">
+          <td class="p-2.5 font-mono text-slate-600 whitespace-nowrap">${t.date}</td>
+          <td class="p-2.5 font-bold text-slate-900">${t.desc} ${t.installment ? `<span class="ml-1 px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700 text-[10px]">${t.installment}</span>` : ""}</td>
+          <td class="p-2.5"><span class="px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 font-semibold">${t.category}</span></td>
+          <td class="p-2.5 text-slate-600">${t.account}</td>
+          <td class="p-2.5 font-semibold ${t.who === 'Esra' ? 'text-purple-700' : 'text-emerald-700'}">${t.who || 'Serdar'}</td>
+          <td class="p-2.5 text-right font-extrabold whitespace-nowrap ${t.amount > 0 ? 'text-emerald-600' : 'text-rose-600'}">${fmt(t.amount)}</td>
+        </tr>
       `).join("");
     };
 
     function renderSliders() {
       const el = document.getElementById("budget-sliders");
       if (!el) return;
+      const totalLim = Object.values(budgets).reduce((acc, v) => acc + Number(v || 0), 0);
+      const netGain = controlConfig.monthlyIncome - controlConfig.loanInstallment - totalLim;
+
+      const totLimEl = document.getElementById("goal-tab-total-limit");
+      const netGainEl = document.getElementById("goal-tab-net-gain");
+      if (totLimEl) totLimEl.textContent = fmt(totalLim);
+      if (netGainEl) {
+        netGainEl.textContent = netGain >= 0 ? `+${fmt(netGain)} / Ay` : `${fmt(netGain)} / Ay`;
+        netGainEl.className = netGain >= 0 ? "text-emerald-700" : "text-rose-600";
+      }
+
       el.innerHTML = Object.entries(budgets).map(([c, v]) => `
         <div class="p-3.5 bg-slate-50 rounded-xl border border-slate-200">
           <div class="flex justify-between text-xs font-bold mb-1.5"><span>${c}</span><span>${fmt(v)}</span></div>
-          <input type="range" min="2000" max="40000" step="500" value="${v}" onchange="window.upBud('${c}', this.value)" class="w-full accent-emerald-600" />
+          <input type="range" min="1500" max="40000" step="500" value="${v}" onchange="window.upBud('${c}', this.value)" class="w-full accent-emerald-600" />
         </div>
       `).join("");
     }
