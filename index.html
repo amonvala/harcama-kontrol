@@ -98,7 +98,8 @@
     <header class="sticky top-0 z-30 glass-bar border-b border-slate-200 px-4 py-3 flex flex-wrap items-center justify-between gap-2">
       <div class="flex items-center gap-2">
         <h2 class="font-extrabold text-base text-slate-900">Ortak Kasa</h2>
-        <button type="button" onclick="window.openCloudModal()" id="top-status-pill" class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800">v4.3 • Anında Kayıt Aktif</button>
+        <button type="button" onclick="window.openCloudModal()" id="top-status-pill" class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800">v4.5 • Anında Kayıt Aktif</button>
+        <button type="button" onclick="window.lockPinSessionNow()" id="pin-session-badge" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 hover:bg-rose-100 text-slate-700 hover:text-rose-700 transition" title="Kasayı Hemen Kilitle">🔒 6s Oturum</button>
       </div>
       <div class="flex items-center gap-2 flex-wrap">
         <div class="flex lg:hidden bg-slate-200 p-0.5 rounded-lg">
@@ -735,12 +736,79 @@
     let txSortAsc = false;
     let initialMonthSelected = false;
 
-    // PIN GÜVENLİK SİSTEMİ (Serdar: 202620, Esra: 186818, 3 Hatalı Girişte 5 Dk Kilit)
+    // PIN GÜVENLİK SİSTEMİ (Serdar: 202620, Esra: 186818, 3 Hatalı Girişte 5 Dk Kilit, Başarılı Girişte 6 Saat Geçerli)
     const USER_PINS = { Serdar: "202620", Esra: "186818" };
+    const PIN_SESSION_KEY = "ortak_kasa_pin_session_v1";
+    const PIN_LOCKOUT_KEY = "ortak_kasa_pin_lockout_v1";
+    const PIN_VALID_DURATION_MS = 6 * 60 * 60 * 1000; // 6 Saat
     let pinSelectedUser = "Serdar";
     let pinFailedAttempts = 0;
     let pinLockUntil = 0;
     let pinTimerInterval = null;
+
+    function loadPinSecurityState() {
+      try {
+        const rawLock = localStorage.getItem(PIN_LOCKOUT_KEY);
+        if (rawLock) {
+          const parsedLock = JSON.parse(rawLock);
+          if (parsedLock.lockUntil && Date.now() < parsedLock.lockUntil) {
+            pinLockUntil = parsedLock.lockUntil;
+            pinFailedAttempts = parsedLock.attempts || 3;
+            updatePinLockoutUI();
+            if (pinTimerInterval) clearInterval(pinTimerInterval);
+            pinTimerInterval = setInterval(updatePinLockoutUI, 1000);
+          } else {
+            localStorage.removeItem(PIN_LOCKOUT_KEY);
+          }
+        }
+
+        const rawSess = localStorage.getItem(PIN_SESSION_KEY);
+        if (rawSess) {
+          const sess = JSON.parse(rawSess);
+          if (sess && sess.expiresAt && Date.now() < sess.expiresAt && USER_PINS[sess.user]) {
+            document.getElementById("pin-lock-overlay").classList.add("hidden");
+            window.setActiveUser(sess.user);
+            updatePinSessionBadge();
+            return;
+          } else {
+            localStorage.removeItem(PIN_SESSION_KEY);
+          }
+        }
+      } catch (e) {}
+      document.getElementById("pin-lock-overlay").classList.remove("hidden");
+    }
+
+    function updatePinSessionBadge() {
+      const badgeEl = document.getElementById("pin-session-badge");
+      try {
+        const rawSess = localStorage.getItem(PIN_SESSION_KEY);
+        if (!rawSess) {
+          document.getElementById("pin-lock-overlay").classList.remove("hidden");
+          return;
+        }
+        const sess = JSON.parse(rawSess);
+        const remainingMs = (sess.expiresAt || 0) - Date.now();
+        if (remainingMs <= 0) {
+          localStorage.removeItem(PIN_SESSION_KEY);
+          document.getElementById("pin-lock-overlay").classList.remove("hidden");
+          document.getElementById("pin-input").value = "";
+          toast("⏰ 6 saatlik PIN oturum süreniz doldu. Lütfen tekrar giriş yapın.", true);
+          return;
+        }
+        if (badgeEl) {
+          const remHours = Math.floor(remainingMs / (60 * 60 * 1000));
+          const remMins = Math.ceil((remainingMs % (60 * 60 * 1000)) / (60 * 1000));
+          badgeEl.textContent = `🔓 ${sess.user} (${remHours}s ${remMins}dk) • Kilitle`;
+        }
+      } catch (e) {}
+    }
+
+    window.lockPinSessionNow = function() {
+      try { localStorage.removeItem(PIN_SESSION_KEY); } catch (e) {}
+      document.getElementById("pin-input").value = "";
+      document.getElementById("pin-lock-overlay").classList.remove("hidden");
+      toast("🔒 Kasa kilitlendi.");
+    };
 
     window.selectPinUser = function(u) {
       pinSelectedUser = u;
@@ -767,6 +835,7 @@
         if (pinLockUntil !== 0) {
           pinLockUntil = 0;
           pinFailedAttempts = 0;
+          try { localStorage.removeItem(PIN_LOCKOUT_KEY); } catch (e) {}
           errEl.classList.add("hidden");
           btnEl.disabled = false;
           inpEl.disabled = false;
@@ -785,15 +854,28 @@
       const errEl = document.getElementById("pin-error-msg");
       if (entered === USER_PINS[pinSelectedUser]) {
         pinFailedAttempts = 0;
+        const expiresAt = Date.now() + PIN_VALID_DURATION_MS;
+        try {
+          localStorage.removeItem(PIN_LOCKOUT_KEY);
+          localStorage.setItem(PIN_SESSION_KEY, JSON.stringify({
+            user: pinSelectedUser,
+            unlockedAt: Date.now(),
+            expiresAt
+          }));
+        } catch (err) {}
         errEl.classList.add("hidden");
         document.getElementById("pin-lock-overlay").classList.add("hidden");
         window.setActiveUser(pinSelectedUser);
-        toast(`🔓 Hoş geldiniz ${pinSelectedUser}!`);
+        updatePinSessionBadge();
+        toast(`🔓 Hoş geldiniz ${pinSelectedUser}! Oturumunuz 6 saat boyunca açık kalacak.`);
       } else {
         pinFailedAttempts++;
         document.getElementById("pin-input").value = "";
         if (pinFailedAttempts >= 3) {
           pinLockUntil = Date.now() + 5 * 60 * 1000;
+          try {
+            localStorage.setItem(PIN_LOCKOUT_KEY, JSON.stringify({ lockUntil: pinLockUntil, attempts: pinFailedAttempts }));
+          } catch (err) {}
           updatePinLockoutUI();
           if (pinTimerInterval) clearInterval(pinTimerInterval);
           pinTimerInterval = setInterval(updatePinLockoutUI, 1000);
@@ -803,6 +885,9 @@
         }
       }
     };
+
+    // Her 30 saniyede bir 6 saatlik PIN oturum süresinin dolup dolmadığını kontrol et
+    setInterval(updatePinSessionBadge, 30000);
 
     const CATEGORIES = [
       "Market & Mutfak", "Tekel & Kuruyemiş", "Yeme & İçme / Eğlence", "Eğitim & Çocuk", "Eş Bütçesi (Esra)",
@@ -1998,6 +2083,7 @@
     renderAccountSelects();
     window.nextQuote();
     window.renderAll();
+    loadPinSecurityState();
     initCloud();
   </script>
 </body>
