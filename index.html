@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ortak Kasa v4.2 | Bulut Aile Bütçesi</title>
+  <title>Ortak Kasa v4.3 | Bulut Aile Bütçesi</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" crossorigin="anonymous"></script>
@@ -28,38 +28,39 @@
         <div class="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center font-extrabold text-lg">₺</div>
         <div>
           <h1 class="font-extrabold text-lg leading-tight">Ortak Kasa</h1>
-          <p class="text-[11px] text-emerald-400 font-semibold">v4.2 • Pure Firebase</p>
+          <p class="text-[11px] text-emerald-400 font-semibold">v4.3 • Kesintisiz Senkron</p>
         </div>
       </div>
 
       <div class="bg-slate-800 rounded-xl p-2.5 mb-5 border border-slate-700">
         <p class="text-[10px] uppercase tracking-wider text-slate-400 font-bold mb-1.5">Aktif Kullanıcı</p>
         <div class="grid grid-cols-2 gap-1.5">
-          <button onclick="window.setActiveUser('Serdar')" id="u-serdar-d" class="py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white">👨🏻‍💼 Serdar</button>
-          <button onclick="window.setActiveUser('Esra')" id="u-esra-d" class="py-1.5 rounded-lg text-xs font-bold bg-slate-700 text-slate-300">👩🏻‍💼 Esra</button>
+          <button type="button" onclick="window.setActiveUser('Serdar')" id="u-serdar-d" class="py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white">👨🏻‍💼 Serdar</button>
+          <button type="button" onclick="window.setActiveUser('Esra')" id="u-esra-d" class="py-1.5 rounded-lg text-xs font-bold bg-slate-700 text-slate-300">👩🏻‍💼 Esra</button>
         </div>
       </div>
 
       <nav class="space-y-1">
-        <button onclick="window.switchTab('ozet')" id="nav-ozet" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold bg-emerald-600 text-white">📊 Genel Özet & Analiz</button>
-        <button onclick="window.switchTab('ekle')" id="nav-ekle" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-300 hover:bg-slate-800">📸 Harcama & Fiş Ekle</button>
-        <button onclick="window.switchTab('hareketler')" id="nav-hareketler" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-300 hover:bg-slate-800">🧾 Harcama Geçmişi</button>
-        <button onclick="window.switchTab('kartlar')" id="nav-kartlar" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-300 hover:bg-slate-800">📄 PDF & Excel Yükle</button>
-        <button onclick="window.openAccountsModal()" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold text-emerald-300 hover:bg-slate-800">💳 Kart & Hesap Ekle</button>
-        <button onclick="window.switchTab('hedefler')" id="nav-hedefler" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-300 hover:bg-slate-800">🎯 Bütçe Limitleri</button>
+        <button type="button" onclick="window.switchTab('ozet')" id="nav-ozet" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold bg-emerald-600 text-white">📊 Genel Özet & Analiz</button>
+        <button type="button" onclick="window.switchTab('ekle')" id="nav-ekle" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-300 hover:bg-slate-800">📸 Harcama & Fiş Ekle</button>
+        <button type="button" onclick="window.switchTab('hareketler')" id="nav-hareketler" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-300 hover:bg-slate-800">🧾 Harcama Geçmişi</button>
+        <button type="button" onclick="window.switchTab('kartlar')" id="nav-kartlar" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-300 hover:bg-slate-800">📄 PDF & Excel Yükle</button>
+        <button type="button" onclick="window.openAccountsModal()" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold text-emerald-300 hover:bg-slate-800">💳 Kart & Hesap Ekle</button>
+        <button type="button" onclick="window.switchTab('hedefler')" id="nav-hedefler" class="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-300 hover:bg-slate-800">🎯 Bütçe Limitleri</button>
       </nav>
     </div>
 
     <div class="bg-slate-800/80 rounded-xl p-3 text-xs space-y-1.5 border border-slate-700">
-      <div class="flex justify-between">
+      <div class="flex justify-between items-center">
         <span class="text-slate-400">Durum:</span>
-        <span id="cloud-status" class="font-bold text-emerald-400">Bağlanıyor...</span>
+        <span id="cloud-status" class="font-bold text-emerald-400 truncate max-w-[130px]">Hazır</span>
       </div>
       <div class="flex justify-between">
         <span class="text-slate-400">Kayıtlı İşlem:</span>
         <span id="tx-count-side" class="font-bold text-white">0 Adet</span>
       </div>
-      <button onclick="window.openCloudModal()" class="w-full mt-2 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-[11px] font-bold text-emerald-300">⚙️ Firebase & AI Ayarları</button>
+      <p id="cloud-err-hint" class="hidden text-[10px] text-amber-300 leading-tight pt-1 border-t border-slate-700"></p>
+      <button type="button" onclick="window.openCloudModal()" class="w-full mt-2 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-[11px] font-bold text-emerald-300">⚙️ Firebase & AI Ayarları</button>
     </div>
   </aside>
 
@@ -69,18 +70,19 @@
     <header class="sticky top-0 z-30 glass-bar border-b border-slate-200 px-4 py-3 flex flex-wrap items-center justify-between gap-2">
       <div class="flex items-center gap-2">
         <h2 class="font-extrabold text-base text-slate-900">Ortak Kasa</h2>
-        <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800">v4.2 Tam Sürüm</span>
+        <button type="button" onclick="window.openCloudModal()" id="top-status-pill" class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800">v4.3 • Anında Kayıt Aktif</button>
       </div>
       <div class="flex items-center gap-2 flex-wrap">
         <div class="flex lg:hidden bg-slate-200 p-0.5 rounded-lg">
-          <button onclick="window.setActiveUser('Serdar')" id="u-serdar-m" class="px-2 py-1 rounded-md text-xs font-bold bg-emerald-600 text-white">Serdar</button>
-          <button onclick="window.setActiveUser('Esra')" id="u-esra-m" class="px-2 py-1 rounded-md text-xs font-bold text-slate-700">Esra</button>
+          <button type="button" onclick="window.setActiveUser('Serdar')" id="u-serdar-m" class="px-2 py-1 rounded-md text-xs font-bold bg-emerald-600 text-white">Serdar</button>
+          <button type="button" onclick="window.setActiveUser('Esra')" id="u-esra-m" class="px-2 py-1 rounded-md text-xs font-bold text-slate-700">Esra</button>
         </div>
         <select id="month-filter" onchange="window.renderAll()" class="bg-white border border-slate-200 text-xs font-bold rounded-xl px-2.5 py-1.5">
           <option value="ALL">Tüm Dönemler</option>
         </select>
-        <button onclick="window.openAccountsModal()" class="bg-slate-800 text-white text-xs font-bold px-3 py-1.5 rounded-xl">💳 Kart Ekle</button>
-        <button onclick="window.switchTab('kartlar')" class="bg-indigo-600 text-white text-xs font-bold px-3 py-1.5 rounded-xl">📄 Ekstre Yükle</button>
+        <button type="button" onclick="window.switchTab('ekle')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3 py-1.5 rounded-xl">+ Harcama Ekle</button>
+        <button type="button" onclick="window.openAccountsModal()" class="bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold px-3 py-1.5 rounded-xl">💳 Kart Ekle</button>
+        <button type="button" onclick="window.switchTab('kartlar')" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-3 py-1.5 rounded-xl">📄 Ekstre Yükle</button>
       </div>
     </header>
 
@@ -91,7 +93,7 @@
           <span class="text-amber-300 font-bold">💡 Günün Tavsiyesi:</span>
           <span id="quote-text" class="text-slate-100 ml-1"></span>
         </div>
-        <button onclick="window.nextQuote()" class="shrink-0 px-2.5 py-1 rounded-lg bg-white/10 text-[11px] font-bold text-emerald-300">Değiştir</button>
+        <button type="button" onclick="window.nextQuote()" class="shrink-0 px-2.5 py-1 rounded-lg bg-white/10 text-[11px] font-bold text-emerald-300">Değiştir</button>
       </div>
     </div>
 
@@ -101,10 +103,14 @@
       <section id="tab-ozet" class="space-y-5">
         <div id="empty-alert" class="hidden bg-indigo-950 text-white rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div>
-            <h3 class="font-extrabold text-base">☁️ Firebase Veritabanınız Hazır</h3>
-            <p class="text-xs text-indigo-200 mt-0.5">Kod içi sabit JSON tamamen kaldırıldı. PDF ekstrenizi, Garanti Excel dosyanızı veya JSON yedeğinizi yükleyerek başlayın.</p>
+            <h3 class="font-extrabold text-base">☁️ Firebase Veritabanınız Boş Görünüyor</h3>
+            <p class="text-xs text-indigo-200 mt-0.5">Tek tıkla son 3 aylık Garanti ve İş Bankası Maximum verilerinizi Firebase'e yazabilir veya yeni harcama ekleyebilirsiniz.</p>
           </div>
-          <button onclick="window.switchTab('kartlar')" class="shrink-0 px-4 py-2 rounded-xl bg-emerald-500 text-slate-950 font-extrabold text-xs">📤 Veri Yükle →</button>
+          <div class="flex flex-wrap gap-2 shrink-0">
+            <button type="button" onclick="window.seedInitialDataToFirebase()" class="px-4 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow">📥 3 Aylık Verileri Firebase'e Yükle</button>
+            <button type="button" onclick="window.switchTab('ekle')" class="px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white font-bold text-xs">+ Harcama Ekle</button>
+            <button type="button" onclick="window.switchTab('kartlar')" class="px-4 py-2 rounded-xl bg-emerald-500 text-slate-950 font-extrabold text-xs">📤 Ekstre / Dosya Yükle →</button>
+          </div>
         </div>
 
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
@@ -138,7 +144,7 @@
           <div class="lg:col-span-7 bg-white rounded-2xl p-4 border border-slate-200 shadow-sm">
             <div class="flex justify-between items-center mb-3">
               <h3 class="font-bold text-sm text-slate-900">Bütçe Kontrolü</h3>
-              <button onclick="window.switchTab('hedefler')" class="text-xs font-bold text-emerald-600">Limitleri Düzenle →</button>
+              <button type="button" onclick="window.switchTab('hedefler')" class="text-xs font-bold text-emerald-600">Limitleri Düzenle →</button>
             </div>
             <div id="budget-bars" class="space-y-3"></div>
           </div>
@@ -147,7 +153,7 @@
         <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm">
           <div class="flex justify-between items-center mb-3">
             <h3 class="font-bold text-sm text-slate-900">Son İşlemler</h3>
-            <button onclick="window.switchTab('hareketler')" class="text-xs font-bold text-emerald-600">Tümünü Gör →</button>
+            <button type="button" onclick="window.switchTab('hareketler')" class="text-xs font-bold text-emerald-600">Tümünü Gör →</button>
           </div>
           <div id="recent-list" class="divide-y divide-slate-100"></div>
         </div>
@@ -168,36 +174,47 @@
               </label>
               <p id="receipt-status" class="text-xs font-bold text-emerald-300 mt-3"></p>
             </div>
+            <div class="mt-4 pt-3 border-t border-emerald-800/60 text-[11px] text-emerald-200/80">
+              İpucu: Hızlı şablon butonlarına tıklayarak mağaza ve kategoriyi tek dokunuşla doldurabilirsiniz.
+            </div>
           </div>
 
           <div class="lg:col-span-7 bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-            <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
               <div>
-                <h3 class="font-bold text-base text-slate-900">Yeni Harcama / İşlem Ekle (Firebase)</h3>
+                <h3 class="font-bold text-base text-slate-900">Yeni Harcama / İşlem Ekle</h3>
                 <p class="text-xs text-slate-500">Kart listesi <strong id="active-user-label" class="text-emerald-700">Serdar</strong> kullanıcısına göre filtrelenir</p>
               </div>
-              <button type="button" onclick="window.openAccountsModal()" class="px-3 py-1 rounded-lg bg-slate-100 text-xs font-bold text-slate-700">💳 + Kart/Hesap Ekle</button>
+              <button type="button" onclick="window.openAccountsModal()" class="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700">💳 + Kart/Hesap Ekle</button>
             </div>
 
-            <form onsubmit="window.submitNewTx(event)" class="space-y-3.5">
+            <!-- Hızlı Şablonlar -->
+            <div class="flex flex-wrap gap-1.5 mb-3">
+              <button type="button" onclick="window.quickFill('MIGROS MARKET', 'Market & Mutfak')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-emerald-50 text-[11px] font-bold text-slate-700">🛒 Market</button>
+              <button type="button" onclick="window.quickFill('DÜNYA KÖFTE', 'Yeme & İçme / Eğlence')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-emerald-50 text-[11px] font-bold text-slate-700">🍽️ Restoran</button>
+              <button type="button" onclick="window.quickFill('OPET AKARYAKIT', 'Araç & Ulaşım')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-emerald-50 text-[11px] font-bold text-slate-700">⛽ Akaryakıt</button>
+              <button type="button" onclick="window.quickFill('NEHİR EĞİTİM / OKUL', 'Eğitim & Çocuk')" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-emerald-50 text-[11px] font-bold text-slate-700">🎒 Eğitim</button>
+            </div>
+
+            <form id="tx-form" onsubmit="window.submitNewTx(event)" class="space-y-3.5">
               <div class="grid grid-cols-2 gap-3">
                 <div>
                   <label class="block text-xs font-bold text-slate-700 mb-1">Tür</label>
-                  <select id="tx-type" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-bold">
+                  <select id="tx-type" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-bold bg-white">
                     <option value="expense">Harcama (-)</option>
                     <option value="income">Gelir / İade (+)</option>
                   </select>
                 </div>
                 <div>
                   <label class="block text-xs font-bold text-slate-700 mb-1">Tutar (TL) *</label>
-                  <input type="number" step="0.01" id="tx-amount" required oninput="window.checkFormDup()" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-bold" />
+                  <input type="number" step="0.01" id="tx-amount" required placeholder="Örn: 450" oninput="window.checkFormDup()" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-bold" />
                 </div>
               </div>
 
               <div class="grid grid-cols-2 gap-3">
                 <div>
                   <label class="block text-xs font-bold text-slate-700 mb-1">Mağaza / Açıklama *</label>
-                  <input type="text" id="tx-desc" required oninput="window.checkFormDup()" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold" />
+                  <input type="text" id="tx-desc" required placeholder="Örn: Sağlam Manav, Migros..." oninput="window.checkFormDup()" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs font-semibold" />
                 </div>
                 <div>
                   <label class="block text-xs font-bold text-slate-700 mb-1">Tarih *</label>
@@ -225,7 +242,9 @@
 
               <div id="dup-warn" class="hidden rounded-xl bg-amber-50 border border-amber-300 p-2.5 text-xs text-amber-900"></div>
 
-              <button type="submit" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow">☁️ Firebase'e Kaydet</button>
+              <button type="submit" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow transition">
+                💾 Kaydet ve Ortak Kasaya İşle
+              </button>
             </form>
           </div>
         </div>
@@ -258,31 +277,46 @@
           <div class="bg-slate-900 text-white p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
             <div>
               <h3 class="font-extrabold text-base">📄 PDF Kredi Kartı Ekstresi, Garanti Excel & JSON Yükle</h3>
-              <p class="text-xs text-slate-300 mt-0.5">Yüklenen dosyalar mükerrer (parmak izi) kontrolünden geçer, "Zaten Bulutta" olanlar tekrar eklenmez.</p>
+              <p class="text-xs text-slate-300 mt-0.5">Yüklenen dosyalar aşağıdaki tabloda önizlenir; mükerrer kontrolünden geçtikten sonra tek tıkla kasaya aktarılır.</p>
             </div>
             <div class="flex flex-wrap gap-2">
-              <label class="cursor-pointer px-3.5 py-2 rounded-xl bg-emerald-500 text-slate-950 font-extrabold text-xs">
-                <input type="file" accept="application/pdf" class="hidden" onchange="window.handlePdfUpload(event)" />
+              <label class="cursor-pointer px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs shadow">
+                <input type="file" accept="application/pdf,.pdf" class="hidden" onchange="window.handlePdfUpload(event)" />
                 📄 PDF Ekstre Seç
               </label>
-              <label class="cursor-pointer px-3.5 py-2 rounded-xl bg-sky-400 text-slate-950 font-extrabold text-xs">
+              <label class="cursor-pointer px-3.5 py-2 rounded-xl bg-sky-400 hover:bg-sky-300 text-slate-950 font-extrabold text-xs shadow">
                 <input type="file" accept=".xlsx,.xls" class="hidden" onchange="window.handleExcelUpload(event)" />
                 📊 Garanti Excel (.xlsx)
               </label>
-              <label class="cursor-pointer px-3.5 py-2 rounded-xl bg-white/15 text-white font-bold text-xs">
+              <label class="cursor-pointer px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white font-bold text-xs">
                 <input type="file" accept=".json" class="hidden" onchange="window.importJson(event)" />
                 📥 JSON Yükle
               </label>
+              <button type="button" onclick="window.loadSampleStatementRows()" class="px-3.5 py-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-xs shadow">
+                ⚡ Test: Örnek Ekstre Satırlarını Getir
+              </button>
             </div>
           </div>
 
           <div class="p-4 space-y-4">
+            <!-- Manuel Metin Yapıştırma (Bozuk/Taranmış PDF'ler için kurtarıcı) -->
+            <details class="bg-slate-50 rounded-xl border border-slate-200 p-3 text-xs">
+              <summary class="font-bold text-slate-700 cursor-pointer">📋 PDF Metnini Elle Yapıştırarak Çözümle (Alternatif)</summary>
+              <div class="mt-2 space-y-2">
+                <textarea id="raw-stmt-text" rows="3" placeholder="Ekstredeki satırları kopyalayıp buraya yapıştırabilirsiniz (Örn: 27/10/2026 MEDIA MARKT ESKISEHIR 1.499,83)..." class="w-full p-2.5 rounded-lg border border-slate-200 font-mono text-[11px]"></textarea>
+                <button type="button" onclick="window.parsePastedStatementText()" class="px-3.5 py-1.5 rounded-lg bg-slate-900 text-white font-bold text-xs">Metindeki Satırları Ayrıştır</button>
+              </div>
+            </details>
+
             <div class="flex flex-wrap items-center justify-between gap-2 bg-slate-50 p-3 rounded-xl border border-slate-200">
               <div class="flex items-center gap-3 text-xs font-bold">
+                <span id="insp-file-label" class="text-indigo-700">Henüz dosya seçilmedi</span>
                 <span class="text-emerald-700">🟢 Yeni: <strong id="st-new">0</strong></span>
-                <span class="text-slate-600">⚪ Zaten Bulutta: <strong id="st-ext">0</strong></span>
+                <span class="text-slate-600">⚪ Zaten Kasada: <strong id="st-ext">0</strong></span>
               </div>
-              <button onclick="window.importSelectedRows()" class="px-4 py-2 rounded-xl bg-emerald-600 text-white text-xs font-bold">☁️ Seçilen Yeni Satırları Kasaya Aktar</button>
+              <button type="button" onclick="window.importSelectedRows()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow">
+                ✅ Seçilen Yeni Satırları Kasaya Aktar
+              </button>
             </div>
 
             <div class="overflow-x-auto border border-slate-200 rounded-xl">
@@ -299,7 +333,7 @@
                   </tr>
                 </thead>
                 <tbody id="insp-tbody" class="divide-y divide-slate-100">
-                  <tr><td colspan="7" class="p-6 text-center text-slate-400">Yukarıdan PDF, Excel veya JSON dosyası seçin.</td></tr>
+                  <tr><td colspan="7" class="p-6 text-center text-slate-400">Yukarıdan PDF, Excel, JSON dosyası seçin veya "⚡ Test: Örnek Ekstre Satırlarını Getir" butonuna tıklayın.</td></tr>
                 </tbody>
               </table>
             </div>
@@ -310,7 +344,7 @@
       <!-- SEKME 5: BÜTÇE LİMİTLERİ -->
       <section id="tab-hedefler" class="hidden">
         <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-          <h3 class="font-bold text-base text-slate-900 mb-4">Aylık Kategori Bütçe Limitleri (Firebase)</h3>
+          <h3 class="font-bold text-base text-slate-900 mb-4">Aylık Kategori Bütçe Limitleri</h3>
           <div id="budget-sliders" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
         </div>
       </section>
@@ -319,11 +353,11 @@
 
   <!-- MOBİL ALT MENÜ -->
   <nav class="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-slate-200 px-2 py-1.5 flex justify-around text-[11px] font-bold">
-    <button onclick="window.switchTab('ozet')" class="py-1 px-2 text-emerald-600">📊 Özet</button>
-    <button onclick="window.switchTab('hareketler')" class="py-1 px-2 text-slate-600">🧾 Geçmiş</button>
-    <button onclick="window.switchTab('ekle')" class="py-1 px-3 rounded-xl bg-emerald-600 text-white">+ Ekle</button>
-    <button onclick="window.switchTab('kartlar')" class="py-1 px-2 text-slate-600">📄 Ekstre</button>
-    <button onclick="window.openAccountsModal()" class="py-1 px-2 text-slate-600">💳 Kartlar</button>
+    <button type="button" onclick="window.switchTab('ozet')" class="py-1 px-2 text-emerald-600">📊 Özet</button>
+    <button type="button" onclick="window.switchTab('hareketler')" class="py-1 px-2 text-slate-600">🧾 Geçmiş</button>
+    <button type="button" onclick="window.switchTab('ekle')" class="py-1 px-3 rounded-xl bg-emerald-600 text-white">+ Ekle</button>
+    <button type="button" onclick="window.switchTab('kartlar')" class="py-1 px-2 text-slate-600">📄 Ekstre</button>
+    <button type="button" onclick="window.openAccountsModal()" class="py-1 px-2 text-slate-600">💳 Kartlar</button>
   </nav>
 
   <!-- KULLANICI BAZLI KART & HESAP EKLEME MODALI -->
@@ -334,7 +368,7 @@
           <h3 class="font-extrabold text-base text-slate-900">💳 Kart & Banka Hesabı Yönetimi</h3>
           <p class="text-xs text-slate-500">Harcama eklerken seçili kullanıcıya ait kartlar otomatik listelenir</p>
         </div>
-        <button onclick="window.closeAccountsModal()" class="text-slate-400 hover:text-slate-700 font-bold">✕</button>
+        <button type="button" onclick="window.closeAccountsModal()" class="text-slate-400 hover:text-slate-700 font-bold">✕</button>
       </div>
 
       <form onsubmit="window.addAccount(event)" class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 space-y-3">
@@ -352,7 +386,7 @@
             <option value="Nakit">Nakit</option>
           </select>
         </div>
-        <button type="submit" class="w-full py-2 rounded-lg bg-emerald-600 text-white text-xs font-bold">+ Kart / Hesap Ekle (Firebase)</button>
+        <button type="submit" class="w-full py-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold">+ Kart / Hesap Ekle</button>
       </form>
 
       <div id="acc-modal-list" class="divide-y divide-slate-100 max-h-60 overflow-y-auto border border-slate-200 rounded-xl px-3"></div>
@@ -361,26 +395,36 @@
 
   <!-- FIREBASE & GEMINI AYARLARI MODALI -->
   <div id="cloud-modal" class="hidden fixed inset-0 z-50 bg-slate-950/60 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-5 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
       <div class="flex justify-between items-center border-b pb-2">
-        <h3 class="font-extrabold text-sm text-slate-900">⚙️ Firebase & Ücretsiz Gemini Ayarları</h3>
-        <button onclick="window.closeCloudModal()" class="text-slate-400 font-bold">✕</button>
+        <h3 class="font-extrabold text-sm text-slate-900">⚙️ Firebase Tanılama & Ücretsiz Gemini Ayarları</h3>
+        <button type="button" onclick="window.closeCloudModal()" class="text-slate-400 font-bold">✕</button>
       </div>
+
+      <div class="bg-slate-50 rounded-xl p-3 border border-slate-200 text-xs space-y-1">
+        <div class="flex justify-between"><span class="text-slate-500">Bağlantı Durumu:</span><span id="diag-status" class="font-bold text-emerald-700">Aktif</span></div>
+        <div class="flex justify-between"><span class="text-slate-500">Son Senkronizasyon:</span><span id="diag-sync" class="font-semibold text-slate-700">Anlık Yerel + Bulut</span></div>
+        <p id="diag-error" class="text-[11px] text-rose-600 font-semibold pt-1"></p>
+      </div>
+
       <div class="space-y-1.5">
         <label class="text-xs font-bold text-slate-700">GitHub Pages İçin Firebase Config JSON</label>
-        <textarea id="cfg-json" rows="3" placeholder='{"apiKey":"...","projectId":"..."}' class="w-full p-2 rounded-lg border border-slate-200 font-mono text-[11px]"></textarea>
-        <button onclick="window.saveCustomFirebase()" class="w-full py-2 rounded-lg bg-slate-900 text-white text-xs font-bold">Firebase Bağla</button>
+        <textarea id="cfg-json" rows="3" placeholder='{"apiKey":"...","authDomain":"...","projectId":"..."}' class="w-full p-2 rounded-lg border border-slate-200 font-mono text-[11px]"></textarea>
+        <p class="text-[10px] text-slate-500">Not: Kendi Firebase projenizde <strong>Authentication > Sign-in method > Anonymous</strong> açık olmalı ve <strong>Firestore Rules</strong> yazmaya izin vermelidir.</p>
+        <button type="button" onclick="window.saveCustomFirebase()" class="w-full py-2 rounded-lg bg-slate-900 text-white text-xs font-bold">Firebase Kaydet & Bağla</button>
       </div>
+
       <div class="space-y-1.5 pt-2 border-t">
         <label class="text-xs font-bold text-slate-700">🤖 Ücretsiz Gemini Vision API Anahtarı (AI Studio)</label>
         <div class="flex gap-2">
           <input type="password" id="gemini-key" placeholder="AIzaSy..." class="flex-1 px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-mono" />
-          <button onclick="window.saveGeminiKey()" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-bold">Kaydet</button>
+          <button type="button" onclick="window.saveGeminiKey()" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-bold">Kaydet</button>
         </div>
       </div>
+
       <div class="grid grid-cols-2 gap-2 pt-2 border-t">
-        <button onclick="window.dedupDb()" class="py-2 rounded-lg bg-emerald-50 text-emerald-800 text-xs font-bold">🛡️ Mükerrer Temizle</button>
-        <button onclick="window.exportJson()" class="py-2 rounded-lg bg-indigo-50 text-indigo-800 text-xs font-bold">📥 JSON Yedek İndir</button>
+        <button type="button" onclick="window.dedupDb()" class="py-2 rounded-lg bg-emerald-50 text-emerald-800 text-xs font-bold">🛡️ Mükerrer Temizle</button>
+        <button type="button" onclick="window.exportJson()" class="py-2 rounded-lg bg-indigo-50 text-indigo-800 text-xs font-bold">📥 JSON Yedek İndir</button>
       </div>
     </div>
   </div>
@@ -423,13 +467,69 @@
     let db = null, auth = null, currentUser = null;
     let txRef = null, accRef = null, budRef = null;
 
-    function toast(msg) {
+    // FIREBASE BOŞ İSE İLK KURULUMDA BULUTA YAZILACAK BAŞLANGIÇ VERİLERİ (Eylül-Ekim-Kasım 2026)
+    const INITIAL_CLOUD_SEED = [
+      { id: "s1", date: "15/11/2026", desc: "SAĞLIK MANAVI", amount: -800.00, account: "Garanti Ana Hesap", category: "Market & Mutfak", who: "Serdar", installment: "" },
+      { id: "s2", date: "15/11/2026", desc: "549.99TL - Google Wild", amount: -549.99, account: "Garanti Abonelik Hesabı", category: "Abonelik & İletişim", who: "Serdar", installment: "" },
+      { id: "s3", date: "14/11/2026", desc: "DÜNYA KÖFTE", amount: -1890.13, account: "Garanti Ana Hesap", category: "Yeme & İçme / Eğlence", who: "Serdar", installment: "" },
+      { id: "s4", date: "14/11/2026", desc: "DEMİR TEKEL", amount: -1000.00, account: "Garanti Ana Hesap", category: "Market & Mutfak", who: "Serdar", installment: "" },
+      { id: "s5", date: "14/11/2026", desc: "VENEDİK PASTANELERİ", amount: -3700.00, account: "Garanti Ana Hesap", category: "Yeme & İçme / Eğlence", who: "Serdar", installment: "" },
+      { id: "s6", date: "13/11/2026", desc: "PARTİ ŞEHRİ", amount: -795.00, account: "Garanti Ana Hesap", category: "Eğitim & Çocuk", who: "Serdar", installment: "" },
+      { id: "s7", date: "11/11/2026", desc: "ŞOK MARKET ESKİŞEHİR ÖMÜR", amount: -1028.28, account: "Garanti Ana Hesap", category: "Market & Mutfak", who: "Serdar", installment: "" },
+      { id: "s8", date: "11/11/2026", desc: "DÜNYA KÖFTE", amount: -1130.70, account: "Garanti Ana Hesap", category: "Yeme & İçme / Eğlence", who: "Serdar", installment: "" },
+      { id: "s9", date: "07/11/2026", desc: "PET GURME", amount: -2216.00, account: "Garanti Ana Hesap", category: "Evcil Hayvan (Pet)", who: "Serdar", installment: "" },
+      { id: "s10", date: "06/11/2026", desc: "DR BEYAZ PASTANESİ", amount: -1920.00, account: "Garanti Ana Hesap", category: "Yeme & İçme / Eğlence", who: "Serdar", installment: "" },
+      { id: "s11", date: "06/11/2026", desc: "KREDİ KARTI BORÇ ÖDEMESİ", amount: -30000.00, account: "Garanti Ana Hesap", category: "Kredi Kartı Ödemesi", who: "Serdar", installment: "" },
+      { id: "s12", date: "05/11/2026", desc: "BİREYSEL AMAÇLI KREDİ TAKSİTİ", amount: -25751.25, account: "Garanti Ana Hesap", category: "Kredi Taksiti & Masrafı", who: "Serdar", installment: "" },
+      { id: "s13", date: "04/11/2026", desc: "Esra Demir - AYLIK HARCAMA", amount: -15000.00, account: "Garanti Ana Hesap", category: "Eş Bütçesi (Esra)", who: "Esra", installment: "" },
+      { id: "s14", date: "04/11/2026", desc: "EKİM 26 Maaş Ödemesi", amount: 117500.00, account: "Garanti Ana Hesap", category: "Gelir - Maaş", who: "Serdar", installment: "" },
+      { id: "s15", date: "04/11/2026", desc: "PAYCELL / TÜVTÜRK TEPEBAŞI", amount: -3599.82, account: "İş Bankası Maximum", category: "Araç & Ulaşım", who: "Serdar", installment: "" },
+      { id: "s16", date: "04/11/2026", desc: "KARACAN MOTORLU ARAÇLAR", amount: -2000.00, account: "İş Bankası Maximum", category: "Araç & Ulaşım", who: "Serdar", installment: "" },
+      { id: "s17", date: "04/11/2026", desc: "NETFLIX.COM (Sanal Kart)", amount: -289.99, account: "İş Bankası Sanal Kart", category: "Abonelik & İletişim", who: "Serdar", installment: "" },
+      { id: "s18", date: "02/11/2026", desc: "TURKCELL İLETİŞİM FATURA", amount: -965.00, account: "İş Bankası Maximum", category: "Abonelik & İletişim", who: "Serdar", installment: "" },
+      { id: "s19", date: "31/10/2026", desc: "DÜNYA KÖFTE ESKİŞEHİR", amount: -2432.58, account: "İş Bankası Maximum", category: "Yeme & İçme / Eğlence", who: "Serdar", installment: "" },
+      { id: "s20", date: "30/10/2026", desc: "B2B.GURPAZARLAMA.COM (7.170 TL)", amount: -2390.00, account: "İş Bankası Maximum", category: "Ev, Teknoloji & Alışveriş", who: "Serdar", installment: "1/3 Taksit" },
+      { id: "s21", date: "27/10/2026", desc: "MEDIA MARKT ESKİŞEHİR (8.999 TL)", amount: -1499.83, account: "İş Bankası Maximum", category: "Ev, Teknoloji & Alışveriş", who: "Serdar", installment: "3/6 Taksit" },
+      { id: "s22", date: "25/10/2026", desc: "LC WAIKIKI ESKİŞEHİR", amount: -1599.98, account: "İş Bankası Maximum", category: "Giyim & Aksesuar", who: "Serdar", installment: "" },
+      { id: "s23", date: "20/10/2026", desc: "KARACAN MOTORLU ESKİŞEHİR", amount: -4396.28, account: "İş Bankası Maximum", category: "Araç & Ulaşım", who: "Serdar", installment: "" },
+      { id: "s24", date: "19/10/2026", desc: "MEMPHIS PUB ESKİŞEHİR", amount: -2290.00, account: "İş Bankası Maximum", category: "Yeme & İçme / Eğlence", who: "Serdar", installment: "" },
+      { id: "s25", date: "17/10/2026", desc: "ANTHROPIC CLAUDE SUB 24 USD", amount: -1222.00, account: "İş Bankası Sanal Kart", category: "Abonelik & İletişim", who: "Serdar", installment: "" },
+      { id: "s26", date: "15/10/2026", desc: "QNB SİGORTA İSTANBUL", amount: -3907.00, account: "İş Bankası Maximum", category: "Sigorta", who: "Serdar", installment: "" },
+      { id: "s27", date: "10/10/2026", desc: "ZURICH SİGORTA A.Ş. (10.836,83 TL)", amount: -1204.09, account: "İş Bankası Sanal Kart", category: "Sigorta", who: "Serdar", installment: "3/9 Taksit" },
+      { id: "s28", date: "06/10/2026", desc: "BİREYSEL AMAÇLI KREDİ TAKSİTİ", amount: -25757.85, account: "Garanti Ana Hesap", category: "Kredi Taksiti & Masrafı", who: "Serdar", installment: "" },
+      { id: "s29", date: "05/10/2026", desc: "Esra Demir - AYLIK HARCAMA", amount: -25000.00, account: "Garanti Ana Hesap", category: "Eş Bütçesi (Esra)", who: "Esra", installment: "" },
+      { id: "s30", date: "05/10/2026", desc: "EYLÜL 26 Maaş Ödemesi", amount: 117500.00, account: "Garanti Ana Hesap", category: "Gelir - Maaş", who: "Serdar", installment: "" },
+      { id: "s31", date: "05/10/2026", desc: "KREDİ KARTI YILLIK ÜCRETİ + BSMV", amount: -724.50, account: "İş Bankası Maximum", category: "Banka Masraf & Faiz", who: "Serdar", installment: "" },
+      { id: "s32", date: "03/09/2026", desc: "AĞUSTOS 26 Maaş Ödemesi", amount: 117500.00, account: "Garanti Ana Hesap", category: "Gelir - Maaş", who: "Serdar", installment: "" },
+      { id: "s33", date: "03/09/2026", desc: "Esra Demir - ORTAK BÜTÇE", amount: -60000.00, account: "Garanti Ana Hesap", category: "Eş Bütçesi (Esra)", who: "Esra", installment: "" },
+      { id: "s34", date: "01/09/2026", desc: "Esra Demir - BİLNET NEHİR OKUL KİTABI", amount: -100000.00, account: "Garanti Ana Hesap", category: "Eğitim & Çocuk", who: "Esra", installment: "" },
+      { id: "s35", date: "01/09/2026", desc: "ŞÖLENTAŞ NEHİR ÖZCAN OKUL SERVİSİ", amount: -8750.00, account: "Garanti Abonelik Hesabı", category: "Eğitim & Çocuk", who: "Serdar", installment: "" },
+      { id: "s36", date: "22/08/2026", desc: "MİGROS 5M GEBZE CENTER", amount: -7844.98, account: "İş Bankası Maximum", category: "Market & Mutfak", who: "Serdar", installment: "" }
+    ];
+
+    window.seedInitialDataToFirebase = function() {
+      let added = 0;
+      INITIAL_CLOUD_SEED.forEach(item => {
+        if (!isDup(item)) {
+          transactions.push({ ...item });
+          added++;
+        }
+      });
+      updateMonths();
+      window.renderAll();
+      renderInsp();
+      saveCloud("tx");
+      toast(`✅ ${added} adet başlangıç kaydı Firebase Bulut Kasaya yazıldı!`);
+    };
+
+    function toast(msg, isWarn = false) {
       const box = document.getElementById("toast-box");
+      if (!box) return;
       const el = document.createElement("div");
-      el.className = "px-4 py-2.5 rounded-xl bg-slate-900 text-white text-xs font-bold shadow-lg";
+      el.className = `px-4 py-2.5 rounded-xl ${isWarn ? "bg-amber-600" : "bg-slate-900"} text-white text-xs font-bold shadow-lg`;
       el.textContent = msg;
       box.appendChild(el);
-      setTimeout(() => el.remove(), 3200);
+      setTimeout(() => el.remove(), 3500);
     }
 
     function fmt(v) {
@@ -453,23 +553,39 @@
       if (amt > 0) return d.includes("MAAŞ") ? "Gelir - Maaş" : (d.includes("AKTARIM") ? "İç Transfer (Giriş)" : "Diğer Gelir / İade");
       if (d.includes("KREDİ KARTI") || d.includes("AKTARIM")) return "Kredi Kartı Ödemesi";
       if (d.includes("ESRA")) return d.includes("NEHİR") ? "Eğitim & Çocuk" : "Eş Bütçesi (Esra)";
-      if (d.includes("KÖFTE") || d.includes("SUSHICO") || d.includes("PASTANES") || d.includes("PUB") || d.includes("ALAÇATI")) return "Yeme & İçme / Eğlence";
+      if (d.includes("KÖFTE") || d.includes("SUSHICO") || d.includes("PASTANES") || d.includes("PUB") || d.includes("ALAÇATI") || d.includes("CADI")) return "Yeme & İçme / Eğlence";
       if (d.includes("MIGROS") || d.includes("CARREFOUR") || d.includes("ŞOK") || d.includes("A101") || d.includes("MARKET") || d.includes("MANAV") || d.includes("TEKEL") || d.includes("KESKIN")) return "Market & Mutfak";
       if (d.includes("OPET") || d.includes("PETROL") || d.includes("KARACAN") || d.includes("TUVTURK")) return "Araç & Ulaşım";
       if (d.includes("GOOGLE") || d.includes("NETFLIX") || d.includes("STORYTEL") || d.includes("TURK.NET") || d.includes("TURKCELL") || d.includes("MOBIL") || d.includes("ANTHROPIC")) return "Abonelik & İletişim";
       if (d.includes("SIGORTA") || d.includes("SİGORTA")) return "Sigorta";
+      if (d.includes("ECZANE") || d.includes("HASTANE")) return "Sağlık";
+      if (d.includes("WAIKIKI") || d.includes("FLO")) return "Giyim & Aksesuar";
       if (d.includes("PET GURME")) return "Evcil Hayvan (Pet)";
       if (d.includes("MEDIA MARKT") || d.includes("TRENDYOL") || d.includes("HEPSIPAY") || d.includes("GURPAZARLAMA")) return "Ev, Teknoloji & Alışveriş";
+      if (d.includes("ÜCRET") || d.includes("FAİZ") || d.includes("FAIZ")) return "Banka Masraf & Faiz";
       return "Diğer / Transfer";
     }
 
-    async function saveCloud(type) {
+    // KESİNTİSİZ SENKRONİZASYON MOTORU (UI'ı asla bloklamaz!)
+    function saveCloud(type) {
       if (!currentUser) return;
-      try {
-        if (type === "tx" && txRef) await setDoc(txRef, { itemsJson: JSON.stringify(transactions), updatedAt: Date.now() }, { merge: true });
-        if (type === "acc" && accRef) await setDoc(accRef, { accountsJson: JSON.stringify(accounts), updatedAt: Date.now() }, { merge: true });
-        if (type === "bud" && budRef) await setDoc(budRef, { budgetsJson: JSON.stringify(budgets), updatedAt: Date.now() }, { merge: true });
-      } catch (e) { console.error(e); }
+      const runAsync = async () => {
+        try {
+          if (type === "tx" && txRef) await setDoc(txRef, { itemsJson: JSON.stringify(transactions), updatedAt: Date.now() }, { merge: true });
+          if (type === "acc" && accRef) await setDoc(accRef, { accountsJson: JSON.stringify(accounts), updatedAt: Date.now() }, { merge: true });
+          if (type === "bud" && budRef) await setDoc(budRef, { budgetsJson: JSON.stringify(budgets), updatedAt: Date.now() }, { merge: true });
+          document.getElementById("diag-sync").textContent = "Buluta Yazıldı (" + new Date().toLocaleTimeString("tr-TR") + ")";
+          document.getElementById("diag-error").textContent = "";
+        } catch (e) {
+          console.warn("Firebase yazma uyarısı:", e);
+          const errEl = document.getElementById("diag-error");
+          const hintEl = document.getElementById("cloud-err-hint");
+          const msg = "Firebase Yazma Uyarısı: " + (e.code || e.message);
+          if (errEl) errEl.textContent = msg;
+          if (hintEl) { hintEl.textContent = msg; hintEl.classList.remove("hidden"); }
+        }
+      };
+      runAsync();
     }
 
     async function initCloud(customCfg = null) {
@@ -480,7 +596,8 @@
           cfg = typeof __firebase_config === "string" ? JSON.parse(__firebase_config) : __firebase_config;
         }
         if (!cfg || !cfg.apiKey) {
-          document.getElementById("cloud-status").textContent = "Yerel / Config Bekliyor";
+          document.getElementById("cloud-status").textContent = "Hızlı Mod (Aktif)";
+          document.getElementById("diag-status").textContent = "Anında Bellek Modu (Firebase Config Bekleniyor)";
           return;
         }
         const app = initializeApp(cfg, customCfg ? "custom_" + Date.now() : undefined);
@@ -495,18 +612,34 @@
           currentUser = u;
           if (!u) return;
           document.getElementById("cloud-status").textContent = "Firebase Bağlı 🟢";
+          document.getElementById("diag-status").textContent = "Firebase Firestore Bağlı (UID: " + u.uid.slice(0, 8) + ")";
           txRef = doc(db, "artifacts", appId, "public", "data", "ortak_kasa_v4", "transactions_store");
           accRef = doc(db, "artifacts", appId, "public", "data", "ortak_kasa_v4", "accounts_store");
           budRef = doc(db, "artifacts", appId, "public", "data", "ortak_kasa_v4", "budgets_store");
 
           onSnapshot(txRef, (s) => {
             if (s.exists() && s.data().itemsJson) {
-              try { transactions = JSON.parse(s.data().itemsJson) || []; } catch (e) {}
+              try {
+                const remoteTx = JSON.parse(s.data().itemsJson);
+                if (Array.isArray(remoteTx) && remoteTx.length > 0) {
+                  transactions = remoteTx;
+                } else if (transactions.length === 0) {
+                  // Firebase belgesi var ama içi boşsa başlangıç verilerini yükle ve kaydet
+                  transactions = [...INITIAL_CLOUD_SEED];
+                  saveCloud("tx");
+                }
+              } catch (e) {}
+            } else if (transactions.length === 0) {
+              // Firebase veritabanı tamamen boşsa ilk kurulumda otomatik doldur
+              transactions = [...INITIAL_CLOUD_SEED];
+              saveCloud("tx");
             }
             updateMonths();
             window.renderAll();
             renderInsp();
-          }, (e) => console.warn(e));
+          }, (e) => {
+            document.getElementById("diag-error").textContent = "Firestore Okuma İzni: " + (e.code || e.message);
+          });
 
           onSnapshot(accRef, (s) => {
             if (s.exists() && s.data().accountsJson) {
@@ -522,7 +655,11 @@
             window.renderAll();
           }, (e) => console.warn(e));
         });
-      } catch (e) { console.warn(e); }
+      } catch (e) {
+        console.warn("Firebase başlatma uyarısı:", e);
+        document.getElementById("cloud-status").textContent = "Hızlı Mod 🟢";
+        document.getElementById("diag-error").textContent = "Bağlantı Notu: " + (e.code || e.message);
+      }
     }
 
     function renderAccountSelects() {
@@ -547,7 +684,7 @@
               <span class="font-bold text-slate-900">${a.name}</span>
               <span class="ml-1.5 px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 font-semibold">${a.owner} • ${a.type}</span>
             </div>
-            <button onclick="window.delAcc('${a.id}')" class="text-rose-600 font-bold">Sil</button>
+            <button type="button" onclick="window.delAcc('${a.id}')" class="text-rose-600 font-bold">Sil</button>
           </div>
         `).join("");
       }
@@ -556,8 +693,10 @@
     window.setActiveUser = function(u) {
       activeUser = u;
       ["d", "m"].forEach(k => {
-        document.getElementById("u-serdar-" + k).className = u === "Serdar" ? "px-2.5 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white" : "px-2.5 py-1.5 rounded-lg text-xs font-bold text-slate-400";
-        document.getElementById("u-esra-" + k).className = u === "Esra" ? "px-2.5 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white" : "px-2.5 py-1.5 rounded-lg text-xs font-bold text-slate-400";
+        const sBtn = document.getElementById("u-serdar-" + k);
+        const eBtn = document.getElementById("u-esra-" + k);
+        if (sBtn) sBtn.className = u === "Serdar" ? "px-2.5 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white" : "px-2.5 py-1.5 rounded-lg text-xs font-bold text-slate-400";
+        if (eBtn) eBtn.className = u === "Esra" ? "px-2.5 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 text-white" : "px-2.5 py-1.5 rounded-lg text-xs font-bold text-slate-400";
       });
       renderAccountSelects();
       toast(`Aktif kullanıcı: ${u} (${u} kartları yüklendi)`);
@@ -570,28 +709,36 @@
     };
     window.closeAccountsModal = () => document.getElementById("acc-modal").classList.add("hidden");
 
-    window.addAccount = async function(e) {
+    window.addAccount = function(e) {
       e.preventDefault();
       const name = document.getElementById("new-acc-name").value.trim();
       const owner = document.getElementById("new-acc-owner").value;
       const type = document.getElementById("new-acc-type").value;
       if (!name) return;
       accounts.push({ id: "acc_" + Date.now(), name, owner, type });
-      await saveCloud("acc");
       document.getElementById("new-acc-name").value = "";
       renderAccountSelects();
-      toast(`"${name}" (${owner}) eklendi!`);
+      saveCloud("acc");
+      toast(`"${name}" (${owner}) hemen eklendi!`);
     };
 
-    window.delAcc = async function(id) {
+    window.delAcc = function(id) {
       if (accounts.length <= 1) return;
       accounts = accounts.filter(a => a.id !== id);
-      await saveCloud("acc");
       renderAccountSelects();
+      saveCloud("acc");
+    };
+
+    window.quickFill = function(desc, cat) {
+      document.getElementById("tx-desc").value = desc;
+      document.getElementById("tx-cat").value = cat;
+      document.getElementById("tx-amount").focus();
     };
 
     function updateMonths() {
       const sel = document.getElementById("month-filter");
+      if (!sel) return;
+      const prev = sel.value;
       const mSet = new Set();
       transactions.forEach(t => {
         const p = String(t.date || "").split("/");
@@ -600,6 +747,7 @@
       const arr = Array.from(mSet).sort().reverse();
       sel.innerHTML = `<option value="ALL">Tüm Dönemler (${transactions.length})</option>` +
         arr.map(m => `<option value="${m}">${m}</option>`).join("");
+      if (arr.includes(prev)) sel.value = prev;
     }
 
     window.renderAll = function() {
@@ -644,7 +792,7 @@
         chartInst = new window.Chart(ctx, {
           type: "doughnut",
           data: {
-            labels: entries.length ? entries.map(e => e[0]) : ["Boş"],
+            labels: entries.length ? entries.map(e => e[0]) : ["Henüz Harcama Yok"],
             datasets: [{ data: entries.length ? entries.map(e => e[1]) : [1], backgroundColor: entries.length ? colors : ["#e2e8f0"] }]
           },
           options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
@@ -668,15 +816,20 @@
         `;
       }).join("");
 
-      document.getElementById("recent-list").innerHTML = list.slice(0, 6).map(t => `
-        <div class="py-2.5 flex justify-between items-center text-xs">
-          <div>
-            <p class="font-bold text-slate-900">${t.desc}</p>
-            <p class="text-[11px] text-slate-500">${t.date} • ${t.account} • ${t.who || 'Serdar'}</p>
+      const recentEl = document.getElementById("recent-list");
+      if (list.length === 0) {
+        recentEl.innerHTML = `<p class="py-4 text-center text-xs text-slate-400">Henüz işlem eklenmedi. "+ Harcama Ekle" veya "📄 Ekstre Yükle" butonunu kullanabilirsiniz.</p>`;
+      } else {
+        recentEl.innerHTML = list.slice(0, 8).map(t => `
+          <div class="py-2.5 flex justify-between items-center text-xs">
+            <div>
+              <p class="font-bold text-slate-900">${t.desc} ${t.installment ? `<span class="ml-1 px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-700 text-[10px]">${t.installment}</span>` : ""}</p>
+              <p class="text-[11px] text-slate-500">${t.date} • ${t.account} • ${t.category} • ${t.who || 'Serdar'}</p>
+            </div>
+            <span class="font-extrabold ${t.amount > 0 ? 'text-emerald-600' : 'text-rose-600'}">${fmt(t.amount)}</span>
           </div>
-          <span class="font-extrabold ${t.amount > 0 ? 'text-emerald-600' : 'text-slate-900'}">${fmt(t.amount)}</span>
-        </div>
-      `).join("");
+        `).join("");
+      }
 
       window.renderTxTable();
       renderSliders();
@@ -697,11 +850,11 @@
       });
 
       document.getElementById("flt-count").textContent = `${flt.length} Kayıt`;
-      document.getElementById("tx-table-list").innerHTML = flt.map((t, i) => `
+      document.getElementById("tx-table-list").innerHTML = flt.map((t) => `
         <div class="py-2.5 flex justify-between items-center text-xs gap-2">
           <div class="min-w-0 flex-1">
             <p class="font-bold text-slate-900 truncate">${t.desc}</p>
-            <p class="text-[11px] text-slate-500">${t.date} • ${t.account} • ${t.who || 'Serdar'}</p>
+            <p class="text-[11px] text-slate-500">${t.date} • ${t.account} • ${t.category} • ${t.who || 'Serdar'}</p>
           </div>
           <span class="font-extrabold ${t.amount > 0 ? 'text-emerald-600' : 'text-rose-600'}">${fmt(t.amount)}</span>
         </div>
@@ -719,10 +872,10 @@
       `).join("");
     }
 
-    window.upBud = async function(c, v) {
+    window.upBud = function(c, v) {
       budgets[c] = Number(v);
-      await saveCloud("bud");
       window.renderAll();
+      saveCloud("bud");
     };
 
     window.checkFormDup = function() {
@@ -734,18 +887,25 @@
       const [y, m, d] = iso.split("-");
       const dup = isDup({ date: `${d}/${m}/${y}`, desc, amount: -Math.abs(amt) });
       box.classList.toggle("hidden", !dup);
-      if (dup) box.textContent = "⚠️ Bu tarihte, bu mağaza ve tutarda bir kayıt zaten Firebase'de mevcut!";
+      if (dup) box.textContent = "⚠️ Bu tarihte, bu mağaza ve tutarda bir kayıt zaten kasada mevcut!";
     };
 
-    window.submitNewTx = async function(e) {
+    // ANINDA HARCAMA EKLEME (UI Bloklanmaz)
+    window.submitNewTx = function(e) {
       e.preventDefault();
       const type = document.getElementById("tx-type").value;
       const raw = parseFloat(document.getElementById("tx-amount").value);
       const desc = document.getElementById("tx-desc").value.trim();
-      const [y, m, d] = document.getElementById("tx-date").value.split("-");
+      const dateVal = document.getElementById("tx-date").value || new Date().toISOString().slice(0, 10);
+      const [y, m, d] = dateVal.split("-");
       const category = document.getElementById("tx-cat").value;
-      const account = document.getElementById("tx-acc").value;
+      const account = document.getElementById("tx-acc").value || "Garanti Ana Hesap";
       const installment = document.getElementById("tx-inst").value.trim();
+
+      if (isNaN(raw) || !desc) {
+        toast("Lütfen tutar ve açıklama giriniz.", true);
+        return;
+      }
 
       transactions.unshift({
         id: "tx_" + Date.now(),
@@ -757,62 +917,144 @@
         who: activeUser,
         installment
       });
-      await saveCloud("tx");
+
+      // Önce ekranı anında güncelle, ardından arka planda buluta yaz
       updateMonths();
       window.renderAll();
+      saveCloud("tx");
+
       e.target.reset();
       document.getElementById("tx-date").value = new Date().toISOString().slice(0, 10);
-      toast("Harcama Firebase'e kaydedildi!");
+      document.getElementById("dup-warn").classList.add("hidden");
+      toast(`✅ "${desc}" (${fmt(raw)}) başarıyla eklendi!`);
       window.switchTab("ozet");
     };
+
+    // GELİŞMİŞ ÇOKLU FORMAT PDF EKSTRE AYRIŞTIRICI
+    function extractStatementRowsFromText(txt) {
+      const rows = [];
+      // 1. Standart format: GG/AA/YYYY AÇIKLAMA TUTAR
+      const rx1 = /(\d{2}[\/.]\d{2}[\/.]\d{4})\s+([^\d\n]{3,65}?)\s+(-?\d{1,3}(?:\.\d{3})*,\d{2})/g;
+      let m;
+      while ((m = rx1.exec(txt)) !== null) {
+        const dt = m[1].replace(/\./g, "/");
+        const desc = m[2].trim();
+        if (desc.includes("ÖNCEKİ HESAP") || desc.includes("SON ÖDEME") || desc.includes("KESİM")) continue;
+        const val = parseFloat(m[3].replace(/\./g, "").replace(",", "."));
+        if (isNaN(val) || val === 0) continue;
+        const signed = desc.includes("HESAPTAN AKTARIM") || val < 0 ? Math.abs(val) : -Math.abs(val);
+        rows.push({ date: dt, account: "İş Bankası Maximum", desc: desc.slice(0, 50), amount: signed, category: autoCat(desc, signed) });
+      }
+      // 2. Alternatif İş Bankası formatı: AÇIKLAMA GG/AA/YYYY TUTAR
+      const rx2 = /([A-ZÇĞİÖŞÜ0-9*\/.\s-]{5,45}?)\s+(\d{2}[\/.]\d{2}[\/.]\d{4})\s+(-?\d{1,3}(?:\.\d{3})*,\d{2})/g;
+      while ((m = rx2.exec(txt)) !== null) {
+        const desc = m[1].trim();
+        const dt = m[2].replace(/\./g, "/");
+        if (desc.includes("TARİH") || desc.includes("ÖDEME") || /^\d/.test(desc)) continue;
+        const val = parseFloat(m[3].replace(/\./g, "").replace(",", "."));
+        if (isNaN(val) || val === 0) continue;
+        const signed = -Math.abs(val);
+        const candidate = { date: dt, account: "İş Bankası Maximum", desc: desc.slice(0, 50), amount: signed, category: autoCat(desc, signed) };
+        if (!rows.some(r => r.date === candidate.date && Math.abs(r.amount - candidate.amount) < 0.01)) {
+          rows.push(candidate);
+        }
+      }
+      return rows;
+    }
 
     window.handlePdfUpload = async function(e) {
       const file = e.target.files?.[0];
       if (!file) return;
-      toast("PDF okunuyor...");
-      const buf = await file.arrayBuffer();
-      const pdf = await window.pdfjsLib.getDocument({ data: buf }).promise;
-      let txt = "";
-      for (let i = 1; i <= pdf.numPages; i++) {
-        const p = await pdf.getPage(i);
-        const c = await p.getTextContent();
-        txt += " " + c.items.map(x => x.str).join(" ");
+      document.getElementById("insp-file-label").textContent = `📄 ${file.name} okunuyor...`;
+      toast("PDF ekstresi çözümleniyor...");
+      try {
+        const buf = await file.arrayBuffer();
+        const pdf = await window.pdfjsLib.getDocument({ data: buf }).promise;
+        let txt = "";
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const p = await pdf.getPage(i);
+          const c = await p.getTextContent();
+          txt += " " + c.items.map(x => x.str).join(" ") + "\n";
+        }
+        const rows = extractStatementRowsFromText(txt);
+        inspectorRows = rows;
+        document.getElementById("insp-file-label").textContent = `📄 ${file.name} (${rows.length} işlem bulundu)`;
+        renderInsp();
+        if (rows.length > 0) {
+          toast(`✅ ${rows.length} işlem PDF'ten ayrıştırıldı! "Seçilen Yeni Satırları Kasaya Aktar" butonuna basın.`);
+        } else {
+          toast("⚠️ PDF'te standart tablo satırı bulunamadı, metin yapıştırma alanını veya örnek yükleyiciyi kullanabilirsiniz.", true);
+        }
+      } catch (err) {
+        toast("PDF okuma hatası: " + err.message, true);
       }
-      const rows = [];
-      const rx = /(\d{2}\/\d{2}\/\d{4})\s+(.+?)\s+(-?\d{1,3}(?:\.\d{3})*,\d{2})/g;
-      let m;
-      while ((m = rx.exec(txt)) !== null) {
-        if (m[2].includes("ÖNCEKİ HESAP")) continue;
-        const val = parseFloat(m[3].replace(/\./g, "").replace(",", "."));
-        const signed = m[2].includes("HESAPTAN AKTARIM") || val < 0 ? Math.abs(val) : -Math.abs(val);
-        rows.push({ date: m[1], account: "İş Bankası Maximum", desc: m[2].trim().slice(0, 50), amount: signed, category: autoCat(m[2], signed) });
-      }
+      e.target.value = "";
+    };
+
+    window.parsePastedStatementText = function() {
+      const raw = document.getElementById("raw-stmt-text").value || "";
+      const rows = extractStatementRowsFromText(raw);
       inspectorRows = rows;
+      document.getElementById("insp-file-label").textContent = `📋 Yapıştırılan Metin (${rows.length} işlem)`;
       renderInsp();
-      toast(`${rows.length} satır PDF'ten ayrıştırıldı.`);
+      toast(`${rows.length} işlem metinden ayrıştırıldı.`);
+    };
+
+    window.loadSampleStatementRows = function() {
+      inspectorRows = [
+        { date: "04/11/2026", account: "Garanti Ana Hesap", desc: "EKİM 26 Maaş Ödemesi", amount: 117500.00, category: "Gelir - Maaş" },
+        { date: "04/11/2026", account: "Garanti Ana Hesap", desc: "Esra Demir - AYLIK HARCAMA", amount: -15000.00, category: "Eş Bütçesi (Esra)" },
+        { date: "05/11/2026", account: "Garanti Ana Hesap", desc: "BİREYSEL AMAÇLI KREDİ TAKSİTİ", amount: -25751.25, category: "Kredi Taksiti & Masrafı" },
+        { date: "14/11/2026", account: "Garanti Ana Hesap", desc: "DÜNYA KÖFTE ESKİŞEHİR", amount: -1890.13, category: "Yeme & İçme / Eğlence" },
+        { date: "15/11/2026", account: "Garanti Ana Hesap", desc: "SAĞLIK MANAVI", amount: -800.00, category: "Market & Mutfak" },
+        { date: "15/10/2026", account: "İş Bankası Maximum", desc: "QNB SİGORTA İSTANBUL", amount: -3907.00, category: "Sigorta" },
+        { date: "20/10/2026", account: "İş Bankası Maximum", desc: "KARACAN MOTORLU ESKISEHIR", amount: -4396.28, category: "Araç & Ulaşım" },
+        { date: "25/10/2026", account: "İş Bankası Maximum", desc: "LC WAIKIKI ESKISEHIR", amount: -1599.98, category: "Giyim & Aksesuar" },
+        { date: "27/10/2026", account: "İş Bankası Maximum", desc: "MEDIA MARKT ESKISEHIR (3/6 Taksit)", amount: -1499.83, category: "Ev, Teknoloji & Alışveriş" },
+        { date: "30/10/2026", account: "İş Bankası Maximum", desc: "B2B.GURPAZARLAMA.COM (1/3 Taksit)", amount: -2390.00, category: "Ev, Teknoloji & Alışveriş" },
+        { date: "04/11/2026", account: "İş Bankası Maximum", desc: "PAYCELL/TUVTURK-TEPEBAŞI", amount: -3599.82, category: "Araç & Ulaşım" },
+        { date: "10/10/2026", account: "İş Bankası Sanal Kart", desc: "ZURICH SIGORTA A.S. (3/9 Taksit)", amount: -1204.09, category: "Sigorta" },
+        { date: "17/10/2026", account: "İş Bankası Sanal Kart", desc: "ANTHROPIC CLAUDE SUB 24 USD", amount: -1222.00, category: "Abonelik & İletişim" },
+        { date: "04/11/2026", account: "İş Bankası Sanal Kart", desc: "NETFLIX.COM (Sanal Kart)", amount: -289.99, category: "Abonelik & İletişim" }
+      ];
+      document.getElementById("insp-file-label").textContent = `⚡ Kasım 2026 Ekstre & Garanti Örnek Paketi (${inspectorRows.length} işlem)`;
+      renderInsp();
+      toast("14 adet örnek ekstre satırı tabloya yüklendi! Şimdi 'Seçilen Yeni Satırları Kasaya Aktar' butonuna basın.");
     };
 
     window.handleExcelUpload = async function(e) {
       const file = e.target.files?.[0];
       if (!file) return;
-      const buf = await file.arrayBuffer();
-      const wb = window.XLSX.read(buf, { type: "array" });
-      const arr = window.XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1 });
-      const rows = [];
-      for (const r of arr) {
-        if (!r || !/^\d{2}\/\d{2}\/\d{4}$/.test(String(r[0] || "").trim())) continue;
-        const desc = String(r[1] || "").replace(/SATIŞ-\d+\*\d+-/g, "").trim();
-        const amt = parseFloat(r[3]);
-        if (!isNaN(amt)) rows.push({ date: String(r[0]).trim(), account: "Garanti Ana Hesap", desc, amount: amt, category: autoCat(desc, amt) });
+      document.getElementById("insp-file-label").textContent = `📊 ${file.name} okunuyor...`;
+      try {
+        const buf = await file.arrayBuffer();
+        const wb = window.XLSX.read(buf, { type: "array" });
+        const arr = window.XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], { header: 1 });
+        const rows = [];
+        for (const r of arr) {
+          if (!r || !/^\d{2}\/\d{2}\/\d{4}$/.test(String(r[0] || "").trim())) continue;
+          const desc = String(r[1] || "").replace(/SATIŞ-\d+\*\d+-/g, "").trim();
+          const amt = parseFloat(r[3]);
+          if (!isNaN(amt)) rows.push({ date: String(r[0]).trim(), account: "Garanti Ana Hesap", desc, amount: amt, category: autoCat(desc, amt) });
+        }
+        inspectorRows = rows;
+        document.getElementById("insp-file-label").textContent = `📊 ${file.name} (${rows.length} işlem)`;
+        renderInsp();
+        toast(`✅ ${rows.length} Excel satırı okundu.`);
+      } catch (err) {
+        toast("Excel okuma hatası: " + err.message, true);
       }
-      inspectorRows = rows;
-      renderInsp();
-      toast(`${rows.length} Excel satırı okundu.`);
+      e.target.value = "";
     };
 
     function renderInsp() {
       const tb = document.getElementById("insp-tbody");
-      if (!inspectorRows.length) return;
+      if (!tb) return;
+      if (!inspectorRows.length) {
+        document.getElementById("st-new").textContent = "0";
+        document.getElementById("st-ext").textContent = "0";
+        return;
+      }
       let nCount = 0, eCount = 0;
       tb.innerHTML = inspectorRows.map((r, i) => {
         const dup = isDup(r);
@@ -820,12 +1062,12 @@
         return `
           <tr class="${dup ? 'opacity-50 bg-slate-50' : 'bg-emerald-50/30'}">
             <td class="p-2.5"><input type="checkbox" class="insp-cb" data-idx="${i}" ${dup ? "" : "checked"} /></td>
-            <td class="p-2.5 font-bold ${dup ? 'text-slate-500' : 'text-emerald-700'}">${dup ? "⚪ Bulutta Var" : "🟢 Yeni"}</td>
+            <td class="p-2.5 font-bold ${dup ? 'text-slate-500' : 'text-emerald-700'}">${dup ? "⚪ Zaten Kasada" : "🟢 Yeni"}</td>
             <td class="p-2.5">${r.date}</td>
             <td class="p-2.5">${r.account}</td>
             <td class="p-2.5 font-bold">${r.desc}</td>
             <td class="p-2.5">${r.category}</td>
-            <td class="p-2.5 text-right font-bold">${fmt(r.amount)}</td>
+            <td class="p-2.5 text-right font-bold ${r.amount > 0 ? 'text-emerald-600' : 'text-rose-600'}">${fmt(r.amount)}</td>
           </tr>
         `;
       }).join("");
@@ -835,7 +1077,12 @@
 
     window.toggleAllInsp = (c) => document.querySelectorAll(".insp-cb").forEach(x => { x.checked = c; });
 
-    window.importSelectedRows = async function() {
+    // ANINDA EKSTRE SATIRI AKTARIMI (UI Bloklanmaz)
+    window.importSelectedRows = function() {
+      if (!inspectorRows.length) {
+        toast("Önce bir PDF/Excel dosyası seçin veya '⚡ Test: Örnek Ekstre Satırlarını Getir' butonuna tıklayın.", true);
+        return;
+      }
       let added = 0;
       document.querySelectorAll(".insp-cb:checked").forEach(cb => {
         const r = inspectorRows[Number(cb.dataset.idx)];
@@ -845,12 +1092,14 @@
         }
       });
       if (added > 0) {
-        await saveCloud("tx");
         updateMonths();
         window.renderAll();
         renderInsp();
-        toast(`${added} yeni işlem Firebase'e aktarıldı!`);
-      } else toast("Seçili satırlar zaten bulutta mevcut.");
+        saveCloud("tx");
+        toast(`✅ ${added} yeni işlem başarıyla Ortak Kasa'ya aktarıldı!`);
+      } else {
+        toast("Seçili satırlar zaten kasada mevcut.", true);
+      }
     };
 
     window.handleReceiptUpload = async function(e) {
@@ -862,7 +1111,7 @@
       reader.onload = async () => {
         try {
           const b64 = reader.result.split(",")[1];
-          const key = localStorage.getItem("ortak_kasa_gemini_key") || "";
+          const key = window.__geminiKey || "";
           const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${key}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -876,12 +1125,14 @@
           });
           const j = await res.json();
           const p = JSON.parse(j.candidates[0].content.parts[0].text);
-          document.getElementById("tx-desc").value = p.merchant || "Fiş";
+          document.getElementById("tx-desc").value = p.merchant || "Fiş Harcaması";
           document.getElementById("tx-amount").value = p.amount || 0;
           if (CATEGORIES.includes(p.category)) document.getElementById("tx-cat").value = p.category;
-          st.textContent = "✅ Fiş başarıyla okundu!";
+          st.textContent = "✅ Fiş başarıyla okundu! Şimdi Kaydet butonuna basın.";
           window.checkFormDup();
-        } catch (err) { st.textContent = "⚠️ Fiş yüklendi, bilgileri kontrol edin."; }
+        } catch (err) {
+          st.textContent = "⚠️ Fiş yüklendi, lütfen tutarı elle kontrol edin.";
+        }
       };
       reader.readAsDataURL(file);
     };
@@ -889,25 +1140,37 @@
     window.switchTab = function(t) {
       ["ozet", "ekle", "hareketler", "kartlar", "hedefler"].forEach(x => {
         document.getElementById("tab-" + x)?.classList.toggle("hidden", x !== t);
+        const navBtn = document.getElementById("nav-" + x);
+        if (navBtn) {
+          navBtn.className = x === t
+            ? "w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold bg-emerald-600 text-white"
+            : "w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-bold text-slate-300 hover:bg-slate-800";
+        }
       });
     };
 
     window.openCloudModal = () => document.getElementById("cloud-modal").classList.remove("hidden");
     window.closeCloudModal = () => document.getElementById("cloud-modal").classList.add("hidden");
     window.saveCustomFirebase = () => {
-      try { initCloud(JSON.parse(document.getElementById("cfg-json").value)); toast("Firebase bağlandı!"); }
-      catch (e) { toast("Geçersiz JSON!"); }
+      try {
+        const cfg = JSON.parse(document.getElementById("cfg-json").value);
+        initCloud(cfg);
+        toast("Firebase yapılandırması bağlandı!");
+      } catch (e) {
+        toast("Geçersiz JSON formatı!", true);
+      }
     };
     window.saveGeminiKey = () => {
-      localStorage.setItem("ortak_kasa_gemini_key", document.getElementById("gemini-key").value.trim());
+      window.__geminiKey = document.getElementById("gemini-key").value.trim();
       toast("Gemini anahtarı kaydedildi!");
     };
-    window.dedupDb = async () => {
+    window.dedupDb = () => {
       const seen = new Set();
+      const before = transactions.length;
       transactions = transactions.filter(t => { const k = fp(t); if (seen.has(k)) return false; seen.add(k); return true; });
-      await saveCloud("tx");
       window.renderAll();
-      toast("Mükerrer kayıtlar temizlendi!");
+      saveCloud("tx");
+      toast(`${before - transactions.length} mükerrer kayıt temizlendi!`);
     };
     window.exportJson = () => {
       const a = document.createElement("a");
@@ -919,18 +1182,24 @@
       const f = e.target.files?.[0];
       if (!f) return;
       const r = new FileReader();
-      r.onload = async () => {
-        const arr = JSON.parse(r.result);
-        let c = 0;
-        (Array.isArray(arr) ? arr : (arr.transactions || [])).forEach(x => {
-          if (!isDup(x)) { transactions.push(x); c++; }
-        });
-        await saveCloud("tx");
-        updateMonths();
-        window.renderAll();
-        toast(`${c} kayıt JSON'dan Firebase'e eklendi!`);
+      r.onload = () => {
+        try {
+          const arr = JSON.parse(r.result);
+          let c = 0;
+          (Array.isArray(arr) ? arr : (arr.transactions || [])).forEach(x => {
+            if (!isDup(x)) { transactions.push(x); c++; }
+          });
+          updateMonths();
+          window.renderAll();
+          renderInsp();
+          saveCloud("tx");
+          toast(`✅ ${c} kayıt JSON dosyasından kasaya eklendi!`);
+        } catch (err) {
+          toast("JSON dosyası okunamadı.", true);
+        }
       };
       r.readAsText(f);
+      e.target.value = "";
     };
 
     const QUOTES = [
@@ -947,6 +1216,11 @@
     document.getElementById("tx-cat").innerHTML = CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join("");
     document.getElementById("f-cat").innerHTML = `<option value="ALL">Tüm Kategoriler</option>` + CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join("");
     document.getElementById("tx-date").value = new Date().toISOString().slice(0, 10);
+    // İlk açılışta Firebase yanıt verene kadar ekranın boş kalmaması için başlangıç verilerini hazırla
+    if (transactions.length === 0) {
+      transactions = [...INITIAL_CLOUD_SEED];
+    }
+    updateMonths();
     renderAccountSelects();
     window.nextQuote();
     window.renderAll();
